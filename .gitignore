@@ -93,3 +93,7 @@ typings/
 .dynamodb/
 
 # End of https://www.gitignore.io/api/node
+
+
+# We use .es6 and .jsx
+*.js

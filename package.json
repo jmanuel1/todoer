@@ -15,5 +15,15 @@
   },
   "description": "Enter a description of your package!",
   "dependencies": {},
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.5.5"
+  },
+  "scripts": {
+    "build": "babel lib -d lib"
+  }
 }

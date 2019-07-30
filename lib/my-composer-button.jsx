@@ -1,5 +1,4 @@
-import React from 'react';
-import { PropTypes } from 'mailspring-exports';
+import { PropTypes, React } from 'mailspring-exports';
 
 export default class MyComposerButton extends React.Component {
   // Note: You should assign a new displayName to avoid naming
