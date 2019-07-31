@@ -14,16 +14,21 @@
     "composer": true
   },
   "description": "Enter a description of your package!",
-  "dependencies": {},
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "jstodotxt": "^0.7.0"
+  },
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-transform-react-jsx": "^7.3.0",
-    "@babel/preset-env": "^7.5.5"
+    "@babel/preset-env": "^7.5.5",
+    "jasmine": "^3.4.0"
   },
   "scripts": {
-    "build": "babel lib -d lib"
+    "build": "babel lib -d lib",
+    "test": "babel spec -d spec && jasmine"
   }
 }
