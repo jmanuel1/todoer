@@ -58,7 +58,8 @@ export default class MyMessageSidebar extends React.Component {
   }
 
   render() {
-    const content = (this.state.contact) ? this._renderContent() : this._renderPlaceholder();
+    const content = (this.state.contact) ?
+      this._renderContent() : this._renderPlaceholder();
     return (
       <div className="my-message-sidebar">
         {content}

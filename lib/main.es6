@@ -1,7 +1,10 @@
-import { ComponentRegistry } from 'mailspring-exports';
+import { ComponentRegistry, DatabaseStore } from 'mailspring-exports';
 
 import MyComposerButton from './my-composer-button';
 import MyMessageSidebar from './my-message-sidebar';
+import StarredEmailService from './starred-emails/starred-email.service';
+
+let starredEmailService;
 
 // Activate is called when the package is loaded. If your package previously
 // saved state using `serialize` it is provided.
@@ -13,6 +16,8 @@ export function activate() {
   ComponentRegistry.register(MyMessageSidebar, {
     role: 'MessageListSidebar:ContactCard',
   });
+  starredEmailService = new StarredEmailService(DatabaseStore);
+  starredEmailService.listen(console.log);
 }
 
 // Serialize is called when your package is about to be unmounted.
@@ -29,4 +34,5 @@ export function serialize() {}
 export function deactivate() {
   ComponentRegistry.unregister(MyComposerButton);
   ComponentRegistry.unregister(MyMessageSidebar);
+  starredEmailService.destroy();
 }

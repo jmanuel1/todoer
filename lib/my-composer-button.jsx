@@ -1,4 +1,4 @@
-import { PropTypes, React } from 'mailspring-exports';
+import {PropTypes, React} from 'mailspring-exports';
 
 export default class MyComposerButton extends React.Component {
   // Note: You should assign a new displayName to avoid naming
@@ -10,17 +10,18 @@ export default class MyComposerButton extends React.Component {
   // actions and retrieve data.
   static propTypes = {
     draft: PropTypes.object.isRequired,
-    session: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired
   };
 
   shouldComponentUpdate(nextProps) {
     // Our render method doesn't use the provided `draft`, and the draft changes
-    // constantly (on every keystroke!) `shouldComponentUpdate` helps keep Mailspring fast.
+    // constantly (on every keystroke!) `shouldComponentUpdate` helps keep
+    // Mailspring fast.
     return nextProps.session !== this.props.session;
   }
 
   _onClick = () => {
-    const { session, draft } = this.props;
+    const {session, draft} = this.props;
 
     // To retrieve information about the draft, we fetch the current editing
     // session from the draft store. We can access attributes of the draft
@@ -32,10 +33,10 @@ export default class MyComposerButton extends React.Component {
       title: 'Here we go...',
       detail: `Adjusting the subject line To "${newSubject}"`,
       buttons: ['OK'],
-      type: 'info',
+      type: 'info'
     });
 
-    session.changes.add({ subject: newSubject });
+    session.changes.add({subject: newSubject});
   };
 
   _getDialog() {
@@ -43,12 +44,11 @@ export default class MyComposerButton extends React.Component {
   }
 
   render() {
-    return (
-      <div className="my-package">
-        <button className="btn btn-toolbar" onClick={() => this._onClick()} ref="button">
-          Hello World
-        </button>
-      </div>
-    );
+    return (<div className="my-package">
+      <button className="btn btn-toolbar" onClick={() => this._onClick()}
+        ref="button">
+        Hello World
+      </button>
+    </div>);
   }
 }
