@@ -1,10 +1,20 @@
-import { ComponentRegistry, DatabaseStore } from 'mailspring-exports';
+import { ComponentRegistry, DatabaseStore, WorkspaceStore, PreferencesUIStore, React } from 'mailspring-exports';
 
 import MyComposerButton from './my-composer-button';
 import MyMessageSidebar from './my-message-sidebar';
 import StarredEmailService from './starred-emails/starred-email.service';
+import SettingsService from './settings/settings.service';
 
-let starredEmailService;
+let starredEmailService, settingsService, preferencesTab;
+
+/* Our package configuration. */
+export const config = {
+  todoFilePath: {
+    type: 'string',
+    title: 'Path to todo.txt',
+    description: 'This should be the full path to your todo.txt'
+  }
+}
 
 // Activate is called when the package is loaded. If your package previously
 // saved state using `serialize` it is provided.
@@ -17,7 +27,8 @@ export function activate() {
     role: 'MessageListSidebar:ContactCard',
   });
   starredEmailService = new StarredEmailService(DatabaseStore);
-  starredEmailService.listen(console.log);
+  settingsService = new SettingsService(AppEnv.config);
+  // settingsService.listen(() => console.log(AppEnv.config.get('todoer.todoFilePath')));
 }
 
 // Serialize is called when your package is about to be unmounted.
@@ -35,4 +46,5 @@ export function deactivate() {
   ComponentRegistry.unregister(MyComposerButton);
   ComponentRegistry.unregister(MyMessageSidebar);
   starredEmailService.destroy();
+  settingsService.destroy();
 }
