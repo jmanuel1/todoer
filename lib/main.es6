@@ -1,9 +1,11 @@
 import { ComponentRegistry, DatabaseStore, WorkspaceStore, PreferencesUIStore, React } from 'mailspring-exports';
 
-import MyComposerButton from './my-composer-button';
-import MyMessageSidebar from './my-message-sidebar';
+// for async/await
+import 'babel-polyfill';
+
 import StarredEmailService from './starred-emails/starred-email.service';
 import SettingsService from './settings/settings.service';
+import Settings from './ui/settings/settings';
 
 let starredEmailService, settingsService, preferencesTab;
 
@@ -20,15 +22,14 @@ export const config = {
 // saved state using `serialize` it is provided.
 //
 export function activate() {
-  ComponentRegistry.register(MyComposerButton, {
-    role: 'Composer:ActionButton',
+  preferencesTab = new PreferencesUIStore.TabItem({
+    tabId: 'Todoer',
+    displayName: 'Todoer',
+    componentClassFn: () => settingsService.injectInto(Settings, React)
   });
-  ComponentRegistry.register(MyMessageSidebar, {
-    role: 'MessageListSidebar:ContactCard',
-  });
+  PreferencesUIStore.registerPreferencesTab(preferencesTab);
   starredEmailService = new StarredEmailService(DatabaseStore);
   settingsService = new SettingsService(AppEnv.config);
-  // settingsService.listen(() => console.log(AppEnv.config.get('todoer.todoFilePath')));
 }
 
 // Serialize is called when your package is about to be unmounted.
@@ -43,8 +44,7 @@ export function serialize() {}
 // subscribing to events, release them here.
 //
 export function deactivate() {
-  ComponentRegistry.unregister(MyComposerButton);
-  ComponentRegistry.unregister(MyMessageSidebar);
   starredEmailService.destroy();
   settingsService.destroy();
+  PreferencesUIStore.unregisterPreferencesTab(preferencesTab.sectionId);
 }
