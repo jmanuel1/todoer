@@ -6,6 +6,7 @@ import 'babel-polyfill';
 import StarredEmailService from './starred-emails/starred-email.service';
 import SettingsService from './settings/settings.service';
 import Settings from './ui/settings/settings';
+import { toTodo, save } from './email-to-todo/email-to-todo';
 
 let starredEmailService, settingsService, preferencesTab;
 
@@ -29,6 +30,11 @@ export function activate() {
   });
   PreferencesUIStore.registerPreferencesTab(preferencesTab);
   starredEmailService = new StarredEmailService(DatabaseStore);
+  starredEmailService.listen(async thread => {
+    const { subject, firstMessageTimestamp: date } = thread;
+    const todo = toTodo({ subject, date });
+    await save(todo, settingsService.todoFilePath);
+  });
   settingsService = new SettingsService(AppEnv.config);
 }
 
