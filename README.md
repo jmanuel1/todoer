@@ -1,5 +1,7 @@
 # **todoer**: A [Mailspring](https://getmailspring.com) plugin
 
+![A screenshot of the todoer plugin preferences](docs/screenshot.png)
+
 Automatically add an email to your local
 [todo.txt](https://github.com/todotxt/todo.txt) when you star it.
 
