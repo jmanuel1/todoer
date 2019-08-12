@@ -5,6 +5,14 @@
 Automatically add an email to your local
 [todo.txt](https://github.com/todotxt/todo.txt) when you star it.
 
+## What is it?
+
+todoer is a Mailspring plugin that adds emails to your todo.txt whenever you
+star them. The path to the todo file is configurable in a todoer tab under
+Preferences (<kbd>Ctrl+Comma</kbd> on Windows). The plugin acts completely
+locally--there's no sign-in to worry about! It even works with todo.txt files
+that are synced over a cloud service.
+
 ## Development
 
 Node 10.10+!
