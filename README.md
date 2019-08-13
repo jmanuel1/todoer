@@ -13,6 +13,13 @@ Preferences (<kbd>Ctrl+Comma</kbd> on Windows). The plugin acts completely
 locally--there's no sign-in to worry about! It even works with todo.txt files
 that are synced over a cloud service.
 
+## Features
+
+* Puts your actionable email threads into your to-do list for you!
+* Works with a `todo.txt` anywhere in your file system (as long as it has a
+  valid path).
+* Each to-do item created from the subject and date of the thread.
+
 ## Development
 
 Development should be done under Node **10.10+**.
