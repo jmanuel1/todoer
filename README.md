@@ -54,7 +54,8 @@ Please add tests with your changes. Tests are written with
 
 ## Roadmap
 
-1. Write up a README, including relevant details about Mailspring's APIs.
+1. Write up a `docs/mailspring.md` file including relevant details about
+   Mailspring's APIs.
 1. Turn services into Reflux stores. See
    https://foundry376.github.io/Mailspring/guides/Architecture.html.
 2. Correct generated todos like
