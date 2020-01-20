@@ -31,8 +31,9 @@ To build the plugin, use `yarn build`. You should get a `lib/main.js` file. To
 test the build, use `yarn test`.
 
 [Mailspring's API documentation](https://foundry376.github.io/Mailspring/) is
-currently quite lacking, so there are [additional notes](docs/mailspring.md) to
-supplement Mailspring's docs.
+currently quite lacking, so there are [additional
+notes](https://github.com/jmanuel1/todoer/wiki/Unofficial-Mailspring-API-Docs)
+to supplement Mailspring's docs.
 
 ### Directory structure
 
@@ -54,8 +55,6 @@ Please add tests with your changes. Tests are written with
 
 ## Roadmap
 
-1. Write up a `docs/mailspring.md` file including relevant details about
-   Mailspring's APIs.
 1. Turn services into Reflux stores. See
    https://foundry376.github.io/Mailspring/guides/Architecture.html.
 2. Correct generated todos like
