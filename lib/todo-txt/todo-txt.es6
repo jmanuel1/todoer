@@ -36,20 +36,22 @@ function replace(destination, original, source, property) {
   destination[property] = original[property];
 }
 
+export function ensureFixed(todo) {
+  todo = merge(todo, {}); // copy todo
+  if (todo.priority === undefined) {
+    todo.priority = null;
+  }
+  if (todo.contexts !== null && todo.contexts.length === 0) {
+    todo.contexts = null;
+  }
+  if (todo.projects !== null && todo.projects.length === 0) {
+    todo.projects = null;
+  }
+  return todo;
+}
+
 export async function writeTo(filename, todos) {
-  const fixed_todos = todos.map(todo => {
-    todo = merge(todo, {}); // copy todo
-    if (todo.priority === undefined) {
-      todo.priority = null;
-    }
-    if (todo.contexts !== null && todo.contexts.length === 0) {
-      todo.contexts = null;
-    }
-    if (todo.projects !== null && todo.projects.length === 0) {
-      todo.projects = null;
-    }
-    return todo;
-  });
-  const content = TodoTxt.render(fixed_todos);
+  const fixedTodos = todos.map(ensureFixed);
+  const content = TodoTxt.render(fixedTodos);
   return await fs.writeFile(filename, content);
 }

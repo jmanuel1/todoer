@@ -26,4 +26,17 @@ describe('save', function() {
     expect(newContents).toContain('some todo');
     expect(newContents).toContain('another item');
   });
+  // If text, contexts, and projects were mixed up in the original todos, we
+  // should preserve their order
+  it('preserves the order in which previous todos were written', async function() {
+    const todoDir = await fs.mkdtemp(path.join(os.tmpdir(), 'todoer-'));
+    const todoPath = path.join(todoDir, 'todo.txt');
+    const original = 'x 2020-01-18 2020-01-15 +homework 0 +cse310 due:2020-01-19 @school\n';
+    await fs.writeFile(todoPath, original);
+    const newTodo = merge({}, { text: 'another item', projects: ['second'] });
+    await save(newTodo, todoPath);
+    const newContents = await fs.readFile(todoPath, 'utf8');
+    expect(newContents).toContain('+homework 0');
+    expect(newContents).toContain('another item');
+  });
 });
