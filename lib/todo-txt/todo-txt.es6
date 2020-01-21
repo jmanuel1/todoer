@@ -37,6 +37,19 @@ function replace(destination, original, source, property) {
 }
 
 export async function writeTo(filename, todos) {
-  const content = TodoTxt.render(todos);
+  const fixed_todos = todos.map(todo => {
+    todo = merge(todo, {}); // copy todo
+    if (todo.priority === undefined) {
+      todo.priority = null;
+    }
+    if (todo.contexts !== null && todo.contexts.length === 0) {
+      todo.contexts = null;
+    }
+    if (todo.projects !== null && todo.projects.length === 0) {
+      todo.projects = null;
+    }
+    return todo;
+  });
+  const content = TodoTxt.render(fixed_todos);
   return await fs.writeFile(filename, content);
 }
