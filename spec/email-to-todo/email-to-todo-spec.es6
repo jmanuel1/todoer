@@ -43,12 +43,19 @@ describe('toTodo', function() {
 });
 
 describe('save', function() {
-  it('can save a todo to a file while preserving other todos', async function() {
-    const todoDir = await fs.mkdtemp(path.join(os.tmpdir(), 'todoer-'));
-    const todoPath = path.join(todoDir, 'todo.txt');
+  let todoDir, todoPath;
+  beforeEach(async function(done) {
+    todoDir = await fs.mkdtemp(path.join(os.tmpdir(), 'todoer-'));
+    todoPath = path.join(todoDir, 'todo.txt');
+    done();
+  });
+  it('can save a todo to a file and presere other todos', async function() {
     const original = 'some todo +project\n';
     await fs.writeFile(todoPath, original);
-    const newTodo = merge({}, { text: 'another item', projects: ['second'] });
+    const newTodo = merge({}, {
+      text: 'another item',
+      projects: ['second']
+    });
     await save(newTodo, todoPath);
     const newContents = await fs.readFile(todoPath, 'utf8');
     expect(newContents).toContain('some todo');
@@ -56,15 +63,33 @@ describe('save', function() {
   });
   // If text, contexts, and projects were mixed up in the original todos, we
   // should preserve their order
-  it('preserves the order in which previous todos were written', async function() {
-    const todoDir = await fs.mkdtemp(path.join(os.tmpdir(), 'todoer-'));
-    const todoPath = path.join(todoDir, 'todo.txt');
-    const original = 'x 2020-01-18 2020-01-15 +homework 0 +cse310 due:2020-01-19 @school\n';
+  it('preserves order in which previous todos were written', async function() {
+    const original =
+      'x 2020-01-18 2020-01-15 +homework 0 +cse310 due:2020-01-19 @school\n';
     await fs.writeFile(todoPath, original);
-    const newTodo = merge({}, { text: 'another item', projects: ['second'] });
+    const newTodo = merge({}, {
+      text: 'another item',
+      projects: ['second']
+    });
     await save(newTodo, todoPath);
     const newContents = await fs.readFile(todoPath, 'utf8');
     expect(newContents).toContain('+homework 0');
     expect(newContents).toContain('another item');
+  });
+  // never duplicate the same email ID
+  it('never writes a todo with a duplicate email/id', async function() {
+    const original =
+      'x 2020-01-18 2020-01-15 +homework 0 +cse310 due:2020-01-19 email/id:1\n';
+    await fs.writeFile(todoPath, original);
+    const newTodo = merge({}, {
+      text: 'another item',
+      projects: ['second'],
+      'email/id': '1',
+      'email/idString': '1',
+      extensions: [new EmailIDExtension()]
+    });
+    await save(newTodo, todoPath);
+    const newContents = await fs.readFile(todoPath, 'utf8');
+    expect(newContents).not.toContain('another item');
   });
 });
