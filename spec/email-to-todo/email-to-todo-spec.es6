@@ -1,16 +1,44 @@
-import { toTodo, save } from '../../lib/email-to-todo/email-to-todo';
-import { merge } from '../../lib/todo-txt/todo-txt';
+import {
+  toTodo,
+  save
+} from '../../lib/email-to-todo/email-to-todo';
+import {
+  merge,
+  EmailIDExtension
+} from '../../lib/todo-txt/todo-txt';
 import * as path from 'path';
 import * as os from 'os';
-import { promises as fs } from 'fs';
+import {
+  promises as fs
+} from 'fs';
 
 import 'babel-polyfill';
 
 describe('toTodo', function() {
+  let todo;
+  beforeEach(function() {
+    todo = toTodo({
+      subject: 'test',
+      date: '2019-07-30',
+      id: '42'
+    });
+  });
   it('can create a todo object from an email', function() {
-    const todo = toTodo({ subject: 'test', date: '2019-07-30' });
     expect(todo.text).toEqual('test');
     expect(todo.date).toEqual('2019-07-30');
+  });
+  it('can include an id inside the todo object', function() {
+    expect(todo['email/id']).toEqual('42');
+  });
+  it(
+    'includes the id extension and extension string inside the todo object',
+    function() {
+      expect(todo.extensions[0].constructor).toBe(EmailIDExtension);
+      expect(todo['email/idString']).toBe('42');
+    });
+  it('replaces any colon in the id with an underscore', function() {
+    todo = toTodo({ id: 't:42' });
+    expect(todo['email/id']).toBe('t_42');
   });
 });
 

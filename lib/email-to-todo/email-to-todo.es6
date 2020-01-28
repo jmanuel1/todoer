@@ -1,10 +1,27 @@
-import { merge, writeTo, getTodosFrom, ensureFixed } from '../todo-txt/todo-txt';
+import {
+  merge,
+  getTodosFrom,
+  ensureFixed,
+  EmailIDExtension
+} from '../todo-txt/todo-txt';
 import {
   promises as fs
 } from 'fs';
 
 export function toTodo(email) {
-  const todo = merge({}, { text: email.subject, date: email.date });
+  let emailID;
+  if (email.id === undefined) {
+    emailID = undefined
+  } else {
+    emailID = email.id.replace(':', '_');
+  }
+  const todo = merge({}, {
+    text: email.subject,
+    date: email.date,
+    extensions: [new EmailIDExtension()],
+    'email/id': emailID,
+    'email/idString': emailID
+  });
   return todo;
 }
 

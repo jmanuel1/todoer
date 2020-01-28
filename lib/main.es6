@@ -31,8 +31,9 @@ export function activate() {
   PreferencesUIStore.registerPreferencesTab(preferencesTab);
   starredEmailService = new StarredEmailService(DatabaseStore);
   starredEmailService.listen(async thread => {
-    const { subject, firstMessageTimestamp: date } = thread;
-    const todo = toTodo({ subject, date });
+    // console.log(thread.id);
+    const { subject, firstMessageTimestamp: date, id } = thread;
+    const todo = toTodo({ subject, date, id });
     await save(todo, settingsService.todoFilePath);
   });
   settingsService = new SettingsService(AppEnv.config);
