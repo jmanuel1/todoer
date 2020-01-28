@@ -2,13 +2,40 @@ import {
   TodoTxt,
   TodoTxtItem
 } from 'jstodotxt';
+import { TodoTxtExtension } from 'jstodotxt/jsTodoExtensions';
 import {
   promises as fs
 } from 'fs';
 
+global.TodoTxtExtension = TodoTxtExtension;
+
+export class EmailIDExtension extends TodoTxtExtension {
+  constructor() {
+    super();
+    this.name = 'email/id';
+    this.parsingFunction = function(line) {
+      console.log(line);
+      const regex = /\bemail\/id:(\S+)\b/;
+      const match = regex.exec(line);
+      if (match === null) {
+        console.log('no match');
+        return [null, null, null];
+      }
+      return [match[1], line.replace(regex, ''), match[1]];
+    }
+  }
+}
+
 export async function getTodosFrom(filename) {
   const contents = await fs.readFile(filename, 'utf8');
-  return TodoTxt.parse(contents);
+  const emailIDExtension = new EmailIDExtension();
+  const todos = [];
+  for (let line of contents.split('\n')) {
+    if (line === '') continue;
+    const newTodo = new TodoTxtItem(line, [emailIDExtension]);
+    todos.push(newTodo);
+  }
+  return todos;
 }
 
 export function merge(todo, partialTodo) {
@@ -19,12 +46,20 @@ export function merge(todo, partialTodo) {
   replace(newTodo, todo, partialTodo, 'complete');
   replace(newTodo, todo, partialTodo, 'completed');
   replace(newTodo, todo, partialTodo, 'date');
+  replace(newTodo, todo, partialTodo, 'email/id');
+  replace(newTodo, todo, partialTodo, 'email/idString');
   // add contexts
-  newTodo.contexts = (todo.contexts || []).concat(partialTodo.contexts || []);
+  newTodo.contexts = combine(todo, partialTodo, 'contexts');
   // add projects
-  newTodo.projects = (todo.projects || []).concat(partialTodo.projects || []);
+  newTodo.projects = combine(todo, partialTodo, 'projects');
+  // add extensions
+  newTodo.extensions = combine(todo, partialTodo, 'extensions');
 
   return newTodo;
+}
+
+function combine(original, source, property) {
+  return (original[property] || []).concat(source[property] || []);
 }
 
 function replace(destination, original, source, property) {
