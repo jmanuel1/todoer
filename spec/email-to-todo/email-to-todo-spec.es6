@@ -40,6 +40,9 @@ describe('toTodo', function() {
     todo = toTodo({ id: 't:42' });
     expect(todo['email/id']).toBe('t_42');
   });
+  it('tags todos with the @email context', function() {
+    expect(todo.contexts).toContain('email');
+  });
 });
 
 describe('save', function() {

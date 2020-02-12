@@ -57,6 +57,5 @@ Please add tests with your changes. Tests are written with
 
 1. Turn services into Reflux stores. See
    https://foundry376.github.io/Mailspring/guides/Architecture.html.
-4. Tag generated todos as being from the email context (`@email`)
 5. Remove unstarred emails from todo.txt
 6. Update license year

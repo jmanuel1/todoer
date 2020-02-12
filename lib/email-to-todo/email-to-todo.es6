@@ -20,7 +20,8 @@ export function toTodo(email) {
     date: email.date,
     extensions: [new EmailIDExtension()],
     'email/id': emailID,
-    'email/idString': emailID
+    'email/idString': emailID,
+    contexts: ['email']
   });
   return todo;
 }
