@@ -2,6 +2,7 @@ import {
   merge,
   getTodosFrom,
   ensureFixed,
+  parseTodoString,
   EmailIDExtension
 } from '../todo-txt/todo-txt';
 import {
@@ -42,4 +43,19 @@ export async function save(todo, filepath) {
   await fs.writeFile(filepath, newline + todoString, {
     flag: 'a'
   });
+}
+
+// this might nuke the file if someone clicks fast enough
+// I couldn't reproduce it, so I'm not sure
+export async function remove(id, filepath) {
+  const contents = await fs.readFile(filepath, 'utf8');
+  const lines = contents.split('\n');
+  const editedLines = lines.filter(line => {
+    if (line === '') {
+      return false;
+    }
+    const todo = parseTodoString(line);
+    return todo['email/id'] !== id.replace(':', '_');
+  });
+  await fs.writeFile(filepath, editedLines.join('\n'));
 }

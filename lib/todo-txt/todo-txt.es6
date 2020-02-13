@@ -90,3 +90,7 @@ export async function writeTo(filename, todos) {
   const content = TodoTxt.render(fixedTodos);
   return await fs.writeFile(filename, content);
 }
+
+export function parseTodoString(string) {
+  return new TodoTxtItem(string, [new EmailIDExtension()]);
+}

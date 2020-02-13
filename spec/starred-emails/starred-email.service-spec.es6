@@ -49,4 +49,28 @@ describe('StarredEmailService', function() {
     databaseStore.fire();
     expect(subscriber).toHaveBeenCalledWith(thread);
   });
+
+  it('calls a subscriber when an email is unstarred', function() {
+    const subscriber = jasmine.createSpy('subscriber');
+    const thread = {
+      starred: false
+    };
+    const payload = {
+      objectClass: 'Thread',
+      objects: [thread]
+    };
+    const databaseStore = {
+      listen(subscriber, thisArg) {
+        this._subscriber = subscriber.bind(thisArg);
+        return () => null;
+      },
+      fire() {
+        this._subscriber(payload);
+      }
+    };
+    const starredEmailService = new StarredEmailService(databaseStore);
+    starredEmailService.listen(subscriber);
+    databaseStore.fire();
+    expect(subscriber).toHaveBeenCalledWith(thread);
+  });
 });

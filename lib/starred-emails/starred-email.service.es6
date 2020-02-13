@@ -15,10 +15,8 @@ export default class StarredEmailService {
       return;
     }
     for (const thread of payload.objects) {
-      if (thread.starred) {
-        for (const subscriber of this._subscribers) {
-          subscriber(thread);
-        }
+      for (const subscriber of this._subscribers) {
+        subscriber(thread);
       }
     }
   }

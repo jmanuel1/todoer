@@ -1,6 +1,7 @@
 import {
   toTodo,
-  save
+  save,
+  remove
 } from '../../lib/email-to-todo/email-to-todo';
 import {
   merge,
@@ -94,5 +95,30 @@ describe('save', function() {
     await save(newTodo, todoPath);
     const newContents = await fs.readFile(todoPath, 'utf8');
     expect(newContents).not.toContain('another item');
+  });
+});
+
+describe('remove', function() {
+  let todoDir, todoPath;
+  beforeEach(async function(done) {
+    todoDir = await fs.mkdtemp(path.join(os.tmpdir(), 'todoer-'));
+    todoPath = path.join(todoDir, 'todo.txt');
+    done();
+  });
+  it('deletes the todo with the given email/id from the given file', async function() {
+    const original =
+      'x 2020-01-18 2020-01-15 +homework 0 +cse310 due:2020-01-19 email/id:1\n';
+    await fs.writeFile(todoPath, original);
+    await remove('1', todoPath);
+    const newContents = await fs.readFile(todoPath, 'utf8');
+    expect(newContents.trim()).toBe('');
+  });
+  it('deletes a todo with an email/id containing a :', async function() {
+    const original =
+      'x 2020-01-18 2020-01-15 +homework 0 +cse310 due:2020-01-19 email/id:t_1\n';
+    await fs.writeFile(todoPath, original);
+    await remove('t:1', todoPath);
+    const newContents = await fs.readFile(todoPath, 'utf8');
+    expect(newContents.trim()).toBe('');
   });
 });
