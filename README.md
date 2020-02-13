@@ -57,4 +57,3 @@ Please add tests with your changes. Tests are written with
 
 1. Turn services into Reflux stores. See
    https://foundry376.github.io/Mailspring/guides/Architecture.html.
-6. Update license year
