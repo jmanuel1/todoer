@@ -1,4 +1,4 @@
-import { ComponentRegistry, DatabaseStore, WorkspaceStore, PreferencesUIStore, React } from 'mailspring-exports';
+import { DatabaseStore, PreferencesUIStore, React } from 'mailspring-exports';
 
 // for async/await
 import 'babel-polyfill';

@@ -1,4 +1,5 @@
 import SettingsService from '../../lib/settings/settings.service';
+import Reflux from 'reflux';
 
 describe('SettingsService', function() {
   afterEach(function() {
@@ -6,21 +7,15 @@ describe('SettingsService', function() {
   });
 
   it('is a singleton', function() {
-    expect(new SettingsService({
-      observe() {
-        return { dispose() { } };
-      }
-    })).toBe(new SettingsService({
-      observe() {
-        return { dispose() { } };
-      }
-    }));
+    expect(Reflux.initStore(SettingsService)).toBe(Reflux.initStore(SettingsService));
   });
 
   it('observes the provided configuration object', function() {
     const observe = jasmine.createSpy('observe').and.returnValue({ dispose() { } });
-    new SettingsService({
-      observe
+    Reflux.initStore(class extends SettingsService {
+      constructor() {
+        super({ observe });
+      }
     });
     expect(observe).toHaveBeenCalled();
   });

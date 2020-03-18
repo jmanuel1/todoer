@@ -1,39 +1,43 @@
-export default class SettingsService {
-  injectInto(Component, React) {
-    const that = this;
-    return class extends React.Component {
-      constructor(props) {
-        super(props);
-      }
-      render() {
-        return <Component settingsService={that} {...this.props}/>;
-      }
-    }
+const Flux = require('reflux')
+
+// Actions
+
+const setTodoFilePath = Flux.createAction();
+
+// Stores
+
+// console.log(FluxStore.Store);
+
+export default class SettingsService extends Flux.Store {
+  injectInto(Component) {
+    return(props) => {
+      return <Component settingsService={this} {...props}/>;
+    };
   }
 
   constructor(config, keypath = 'todoer.todoFilePath') {
-    if (this.constructor._instance !== undefined) {
-      return this.constructor._instance;
-    }
-    this.constructor._instance = this;
+    super();
     this._config = config;
     this._keypath = keypath;
     this._subscribers = [];
-    this._configSubscription = config.observe(
-      keypath,
+    this._configSubscription = config.observe(keypath,
       path => this.todoFilePath = path);
+    this.state = { todoFilePath: '' };
+    this.listenTo(setTodoFilePath, (path) => this.todoFilePath = path);
   }
 
   set todoFilePath(path) {
-    if (path !== this._todoFilePath && this._todoFilePath !== undefined) {
+    // console.log('path', path);
+    if (path !== this.state.todoFilePath && path !== undefined) {
       this._config.set(this._keypath, path);
+      this.setState({ todoFilePath: path });
     }
-    this._todoFilePath = path;
+
     this._trigger();
   }
 
   get todoFilePath() {
-    return this._todoFilePath;
+    return this.state.todoFilePath;
   }
 
   _trigger() {
@@ -43,7 +47,6 @@ export default class SettingsService {
   }
 
   destroy() {
-    this.constructor._instance = undefined;
     this._configSubscription.dispose();
   }
 

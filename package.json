@@ -16,7 +16,8 @@
   "description": "Enter a description of your package!",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "jstodotxt": "^0.7.0"
+    "jstodotxt": "^0.7.0",
+    "reflux": "^6.4.1"
   },
   "license": "MIT",
   "devDependencies": {
