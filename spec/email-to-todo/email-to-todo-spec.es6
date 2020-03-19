@@ -1,7 +1,8 @@
 import {
   toTodo,
   save,
-  remove
+  remove,
+  backup
 } from '../../lib/email-to-todo/email-to-todo';
 import {
   merge,
@@ -10,7 +11,8 @@ import {
 import * as path from 'path';
 import * as os from 'os';
 import {
-  promises as fs
+  promises as fs,
+  existsSync
 } from 'fs';
 
 import 'babel-polyfill';
@@ -122,3 +124,24 @@ describe('remove', function() {
     expect(newContents.trim()).toBe('');
   });
 });
+
+describe('backup', function () {
+  let todoDir, todoPath, backupPath, original;
+  beforeEach(async function() {
+    todoDir = await fs.mkdtemp(path.join(os.tmpdir(), 'todoer-'));
+    todoPath = path.join(todoDir, 'todo.txt');
+    backupPath = todoPath + '.bk';
+    original =
+      'x 2020-01-18 2020-01-15 +homework 0 +cse310 due:2020-01-19 email/id:t_1\n';
+    await fs.writeFile(todoPath, original);
+    await backup(todoPath, backupPath);
+  });
+  it('creates a backup file', function () {
+    const exists = existsSync(backupPath);
+    expect(exists).toBeTruthy();
+  });
+  it('copies the original todos to the backup file', async function () {
+    const contents = await fs.readFile(backupPath, 'utf8');
+    expect(contents).toBe(original);
+  });
+})

@@ -6,7 +6,7 @@ import 'babel-polyfill';
 import StarredEmailService from './starred-emails/starred-email.service';
 import SettingsService from './settings/settings.service';
 import Settings from './ui/settings/settings';
-import { toTodo, save, remove } from './email-to-todo/email-to-todo';
+import { toTodo, save, remove, backup } from './email-to-todo/email-to-todo';
 
 let starredEmailService, settingsService, preferencesTab;
 
@@ -22,7 +22,13 @@ export const config = {
 // Activate is called when the package is loaded. If your package previously
 // saved state using `serialize` it is provided.
 //
-export function activate() {
+export async function activate() {
+  settingsService = new SettingsService(AppEnv.config);
+
+  // back up the user's todo before we do anything that might damage it
+  const todoFilePath = settingsService.todoFilePath;
+  await backup(todoFilePath, todoFilePath + '.backup');
+
   preferencesTab = new PreferencesUIStore.TabItem({
     tabId: 'Todoer',
     displayName: 'Todoer',
@@ -40,7 +46,6 @@ export function activate() {
     }
     await remove(id, settingsService.todoFilePath);
   });
-  settingsService = new SettingsService(AppEnv.config);
 }
 
 // Serialize is called when your package is about to be unmounted.

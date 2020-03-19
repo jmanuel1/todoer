@@ -65,3 +65,7 @@ export async function remove(id, filepath) {
   });
   await fs.writeFile(filepath, editedLines.join('\n'));
 }
+
+export async function backup(originalPath, backupPath) {
+  await fs.copyFile(originalPath, backupPath);
+}

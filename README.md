@@ -55,6 +55,4 @@ Please add tests with your changes. Tests are written with
 
 ## Roadmap
 
-1. Backup the user's todo.txt whenever the package is activated. One time on
-   3/18/20, after updating dependencies, this plugin went crazy and deleted
-   nearly all of a todo.txt, and I'm not sure why.
+*Empty*
