@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/jmanuel1/todoer/"
   },
   "engines": {
     "mailspring": ">=1.6.3"
@@ -13,7 +13,7 @@
     "default": true,
     "composer": true
   },
-  "description": "Enter a description of your package!",
+  "description": "Automatically add an email to your local todo.txt when you star it.",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "jstodotxt": "^0.7.0"
