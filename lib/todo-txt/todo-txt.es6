@@ -8,17 +8,18 @@ import {
 } from 'fs';
 
 global.TodoTxtExtension = TodoTxtExtension;
+global.Exception = Error;
 
 export class EmailIDExtension extends TodoTxtExtension {
   constructor() {
     super();
     this.name = 'email/id';
     this.parsingFunction = function(line) {
-      console.log(line);
+      console.debug('"' + line + '"');
       const regex = /\bemail\/id:(\S+)\b/;
       const match = regex.exec(line);
       if (match === null) {
-        console.log('no match');
+        console.debug('no match');
         return [null, null, null];
       }
       return [match[1], line.replace(regex, ''), match[1]];

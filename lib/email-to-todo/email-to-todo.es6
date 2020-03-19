@@ -51,10 +51,16 @@ export async function remove(id, filepath) {
   const contents = await fs.readFile(filepath, 'utf8');
   const lines = contents.split('\n');
   const editedLines = lines.filter(line => {
-    if (line === '') {
-      return false;
+    let todo;
+    try {
+      todo = parseTodoString(line);
+    } catch (error) {
+      if (error.message === 'Empty Task') {
+        return false;
+      }
+      console.debug(error);
+      return true;
     }
-    const todo = parseTodoString(line);
     return todo['email/id'] !== id.replace(':', '_');
   });
   await fs.writeFile(filepath, editedLines.join('\n'));
