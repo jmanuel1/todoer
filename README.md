@@ -55,4 +55,12 @@ Please add tests with your changes. Tests are written with
 
 ## Roadmap
 
-*Empty*
+* Stability improvements
+  * See issue #1
+* Extend the StarredEmailService to listen to an arbitrary user-configured label
+  * See issue #2
+* Make our preferences panel look pretty
+  * This might turn into multiple issues
+* Offer installable builds
+  * This may be difficult since, as far as I know, Mailspring doesn't have a
+    user-friendly way of installing plugins yet
