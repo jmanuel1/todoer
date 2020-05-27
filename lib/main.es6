@@ -3,6 +3,9 @@ import { ComponentRegistry, DatabaseStore, WorkspaceStore, PreferencesUIStore, R
 // for async/await
 import 'babel-polyfill';
 
+import queue from 'async/queue';
+import asyncify from 'async/asyncify';
+
 import StarredEmailService from './starred-emails/starred-email.service';
 import SettingsService from './settings/settings.service';
 import Settings from './ui/settings/settings';
@@ -37,7 +40,10 @@ export async function activate() {
   });
   PreferencesUIStore.registerPreferencesTab(preferencesTab);
   starredEmailService = new StarredEmailService(DatabaseStore);
-  starredEmailService.listen(async thread => {
+
+  // To make sure there is only one part of the process accessing the todo file
+  // at a time, we use a queue. Without this, the file could get corrupted.
+  const todoQueue = queue(asyncify(async thread => {
     const { id } = thread;
     if (thread.starred) {
       const { subject, firstMessageTimestamp: date } = thread;
@@ -49,8 +55,9 @@ export async function activate() {
     }
     debug('entering remove')
     await remove(id, settingsService.todoFilePath);
-    debug('exiting remove')
-  });
+  }), 1);
+
+  starredEmailService.listen(thread => todoQueue.push(thread));
 }
 
 // Serialize is called when your package is about to be unmounted.
