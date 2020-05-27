@@ -56,7 +56,7 @@ Please add tests with your changes. Tests are written with
 ## Roadmap
 
 * Stability improvements
-  * See issue #1
+  * See issue #1 (partially fixed)
 * Extend the StarredEmailService to listen to an arbitrary user-configured label
   * See issue #2
 * Make our preferences panel look pretty
