@@ -5,6 +5,7 @@ import {
   parseTodoString,
   EmailIDExtension
 } from '../todo-txt/todo-txt';
+import debug from '../dev/debug';
 import {
   promises as fs
 } from 'fs';
@@ -58,7 +59,7 @@ export async function remove(id, filepath) {
       if (error.message === 'Empty Task') {
         return false;
       }
-      console.debug(error);
+      debug(error);
       return true;
     }
     return todo['email/id'] !== id.replace(':', '_');

@@ -7,6 +7,7 @@ import StarredEmailService from './starred-emails/starred-email.service';
 import SettingsService from './settings/settings.service';
 import Settings from './ui/settings/settings';
 import { toTodo, save, remove, backup } from './email-to-todo/email-to-todo';
+import debug from './dev/debug';
 
 let starredEmailService, settingsService, preferencesTab;
 
@@ -41,10 +42,14 @@ export async function activate() {
     if (thread.starred) {
       const { subject, firstMessageTimestamp: date } = thread;
       const todo = toTodo({ subject, date, id });
+      debug('entering save')
       await save(todo, settingsService.todoFilePath);
+      debug('exiting save')
       return;
     }
+    debug('entering remove')
     await remove(id, settingsService.todoFilePath);
+    debug('exiting remove')
   });
 }
 
