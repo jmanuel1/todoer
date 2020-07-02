@@ -34,6 +34,7 @@
   },
   "scripts": {
     "build": "babel lib -d lib",
-    "test": "babel spec -d spec && jasmine"
+    "test": "babel spec -d spec && jasmine",
+    "watch": "babel lib -d lib --watch"
   }
 }
