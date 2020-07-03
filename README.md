@@ -58,8 +58,6 @@ Please add tests with your changes. Tests are written with
 
 * Stability improvements
   * See issue #1 (partially fixed)
-* Extend the StarredEmailService to listen to an arbitrary user-configured label
-  * See issue #2
 * Make our preferences panel look pretty
   * This might turn into multiple issues
 * Offer installable builds
