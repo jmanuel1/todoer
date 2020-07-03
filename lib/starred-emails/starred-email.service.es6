@@ -14,6 +14,7 @@ export default class StarredEmailService {
     if (payload.objectClass !== 'Thread') {
       return;
     }
+    // We catch all changes to threads, whether that means stars or labels
     for (const thread of payload.objects) {
       for (const subscriber of this._subscribers) {
         subscriber(thread);

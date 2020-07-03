@@ -11,6 +11,7 @@ import SettingsService from './settings/settings.service';
 import Settings from './ui/settings/settings';
 import { toTodo, save, remove, backup } from './email-to-todo/email-to-todo';
 import debug from './dev/debug';
+import { starredLabel } from './models/generalized-label';
 
 let starredEmailService, settingsService, preferencesTab;
 
@@ -19,7 +20,20 @@ export const config = {
   todoFilePath: {
     type: 'string',
     title: 'Path to todo.txt',
-    description: 'This should be the full path to your todo.txt'
+    default: '~/todo.txt',
+    description: 'This should be the full path to your todo.txt',
+  },
+  emailLabel: {
+    type: 'string',
+    title: 'TODO label',
+    default: 'Follow-up',
+    description: 'Email label that Todoer should watch for emails'
+  },
+  useStarsForLabel : {
+    type: 'boolean',
+    title: 'Watch starred emails',
+    default: false,
+    description: 'Whether Todoer should watch for emails that are starred'
   }
 }
 
@@ -30,6 +44,8 @@ export async function activate() {
   settingsService = new SettingsService(AppEnv.config);
 
   // back up the user's todo before we do anything that might damage it
+  // TODO: Back up on every modification
+  // TODO: Keep previous revisions (timestamp?)
   const todoFilePath = settingsService.todoFilePath;
   await backup(todoFilePath, todoFilePath + '.backup');
 
@@ -44,8 +60,19 @@ export async function activate() {
   // To make sure there is only one part of the process accessing the todo file
   // at a time, we use a queue. Without this, the file could get corrupted.
   const todoQueue = queue(asyncify(async thread => {
-    const { id } = thread;
-    if (thread.starred) {
+    // NOTE: Assume that the account's organization unit is label.
+    // https://docs.nylas.com/reference#threads
+    const { id, labels } = thread;
+    let addToTodo = false;
+    if (settingsService.emailLabel.equals(starredLabel) && thread.starred) {
+      addToTodo = true;
+    }
+    for (let label of labels) {
+      if (settingsService.emailLabel.toString() === label.displayName) {
+        addToTodo = true;
+      }
+    }
+    if (addToTodo) {
       const { subject, firstMessageTimestamp: date } = thread;
       const todo = toTodo({ subject, date, id });
       debug('entering save')
@@ -73,6 +100,6 @@ export function serialize() {}
 //
 export function deactivate() {
   starredEmailService.destroy();
-  settingsService.destroy();
+  SettingsService.destroy();
   PreferencesUIStore.unregisterPreferencesTab(preferencesTab.sectionId);
 }

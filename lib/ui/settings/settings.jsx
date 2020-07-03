@@ -5,6 +5,7 @@ try {
   React = require('react');
 }
 import TodoFilePath from '../todo-file-path/todo-file-path';
+import EmailLabel from '../email-label/email-label';
 
 export default class Settings extends React.Component {
 
@@ -19,7 +20,10 @@ export default class Settings extends React.Component {
   }
 
   render() {
-    return <TodoFilePath settingsService={this.props.settingsService}/>;
+    return (<>
+      <TodoFilePath settingsService={this.props.settingsService}/>
+      <EmailLabel settingsService={this.props.settingsService}/>
+    </>);
   }
 }
 
