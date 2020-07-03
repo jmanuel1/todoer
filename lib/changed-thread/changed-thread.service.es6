@@ -1,4 +1,4 @@
-export default class StarredEmailService {
+export default class ChangedThreadService {
   constructor(databaseStore) {
     if (this.constructor._instance !== undefined) {
       return this.constructor._instance;

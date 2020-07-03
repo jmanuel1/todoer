@@ -1,16 +1,16 @@
-import StarredEmailService from '../../lib/starred-emails/starred-email.service';
+import ChangedThreadService from '../../lib/changed-thread/changed-thread.service';
 
-describe('StarredEmailService', function() {
+describe('ChangedThreadService', function() {
   afterEach(function() {
-    new StarredEmailService().destroy();
+    new ChangedThreadService().destroy();
   });
 
   it('is a singleton', function() {
-    expect(new StarredEmailService({
+    expect(new ChangedThreadService({
       listen() {
         return () => null;
       }
-    })).toBe(new StarredEmailService({
+    })).toBe(new ChangedThreadService({
       listen() {
         return () => null;
       }
@@ -20,7 +20,7 @@ describe('StarredEmailService', function() {
   it('listens to the provided database store', function() {
     const listen = jasmine.createSpy('listen').and.returnValue(() =>
       null);
-    new StarredEmailService({
+    new ChangedThreadService({
       listen
     });
     expect(listen).toHaveBeenCalled();
@@ -44,8 +44,8 @@ describe('StarredEmailService', function() {
         this._subscriber(payload);
       }
     };
-    const starredEmailService = new StarredEmailService(databaseStore);
-    starredEmailService.listen(subscriber);
+    const changedThreadService = new ChangedThreadService(databaseStore);
+    changedThreadService.listen(subscriber);
     databaseStore.fire();
     expect(subscriber).toHaveBeenCalledWith(thread);
   });
@@ -68,8 +68,8 @@ describe('StarredEmailService', function() {
         this._subscriber(payload);
       }
     };
-    const starredEmailService = new StarredEmailService(databaseStore);
-    starredEmailService.listen(subscriber);
+    const changedThreadService = new ChangedThreadService(databaseStore);
+    changedThreadService.listen(subscriber);
     databaseStore.fire();
     expect(subscriber).toHaveBeenCalledWith(thread);
   });

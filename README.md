@@ -43,7 +43,8 @@ Plugin code goes in `lib/`, tests/specs go in `spec/`.
 
 * `email-to-todo/`: code that converts email objects to todo.txt objects
 * `settings/`: code that manages the plugin user preferences
-* `starred-emails/`: code that grabs emails as they are starred
+* `changed-thread/`: code that grabs email threads upon any state change (like
+  a star or labels)
 * `todo-txt/`: handles the creation of todo objects, reading and writing of
   `todo.txt`
 * `ui/`: user interface components

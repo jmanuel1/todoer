@@ -6,14 +6,14 @@ import 'babel-polyfill';
 import queue from 'async/queue';
 import asyncify from 'async/asyncify';
 
-import StarredEmailService from './starred-emails/starred-email.service';
+import ChangedThreadService from './changed-thread/changed-thread.service';
 import SettingsService from './settings/settings.service';
 import Settings from './ui/settings/settings';
 import { toTodo, save, remove, backup } from './email-to-todo/email-to-todo';
 import debug from './dev/debug';
 import { starredLabel } from './models/generalized-label';
 
-let starredEmailService, settingsService, preferencesTab;
+let changedThreadService, settingsService, preferencesTab;
 
 /* Our package configuration. */
 export const config = {
@@ -55,7 +55,7 @@ export async function activate() {
     componentClassFn: () => settingsService.injectInto(Settings, React)
   });
   PreferencesUIStore.registerPreferencesTab(preferencesTab);
-  starredEmailService = new StarredEmailService(DatabaseStore);
+  changedThreadService = new ChangedThreadService(DatabaseStore);
 
   // To make sure there is only one part of the process accessing the todo file
   // at a time, we use a queue. Without this, the file could get corrupted.
@@ -84,7 +84,7 @@ export async function activate() {
     await remove(id, settingsService.todoFilePath);
   }), 1);
 
-  starredEmailService.listen(thread => todoQueue.push(thread));
+  changedThreadService.listen(thread => todoQueue.push(thread));
 }
 
 // Serialize is called when your package is about to be unmounted.
@@ -99,7 +99,7 @@ export function serialize() {}
 // subscribing to events, release them here.
 //
 export function deactivate() {
-  starredEmailService.destroy();
+  changedThreadService.destroy();
   SettingsService.destroy();
   PreferencesUIStore.unregisterPreferencesTab(preferencesTab.sectionId);
 }
