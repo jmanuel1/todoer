@@ -40,23 +40,18 @@ export default class EmailLabel extends React.Component {
     const useStars = this.props.settingsService.emailLabel.equals(starredLabel);
     const labelAsString = (useStars ? this.props.settingsService.previousNormalLabel() : this.props.settingsService.emailLabel).toString();
     return (<>
-      <div>
-        <input type='checkbox' name='starred-or-label' checked={useStars} onChange={this._setStarredLabelFromCheckbox}/>
+      <label className='todoer-settings-label'>
+        <input type='checkbox' name='starred-or-label' checked={useStars}
+          onChange={this._setStarredLabelFromCheckbox}
+          className='todoer-settings-input'/>
         Watch starred emails
-      </div>
-      <div>
+      </label>
+      <label className='todoer-settings-label'>
         Watch the given label
-        <input type='textarea' placeholder='Email label name' value={labelAsString} onChange={this._setLabelFromTextArea} disabled={useStars}/>
-      </div>
+        <input type='textarea' placeholder='Email label name'
+          value={labelAsString} onChange={this._setLabelFromTextArea}
+          disabled={useStars} className='todoer-settings-input'/>
+      </label>
     </>);
   }
 }
-
-// Providing container styles tells the app how to constrain
-// the column your component is being rendered in. The min and
-// max size of the column are chosen automatically based on
-// these values.
-EmailLabel.containerStyles = {
-  order: 1,
-  flexShrink: 0
-};

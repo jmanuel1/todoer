@@ -34,18 +34,10 @@ export default class TodoFilePath extends React.Component {
   }
 
   render() {
-    return (<label>
+    return (<label className='todoer-settings-label'>
       Path to todo.txt file:
-      <input value={this.state.todoFilePath} onChange={this._onFormChange}/>
+      <input value={this.state.todoFilePath} onChange={this._onFormChange}
+        className='todoer-settings-input'/>
     </label>);
   }
 }
-
-// Providing container styles tells the app how to constrain
-// the column your component is being rendered in. The min and
-// max size of the column are chosen automatically based on
-// these values.
-TodoFilePath.containerStyles = {
-  order: 1,
-  flexShrink: 0
-};
