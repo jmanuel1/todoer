@@ -40,7 +40,7 @@ export default class EmailLabel extends React.Component {
     const useStars = this.props.settingsService.emailLabel.equals(starredLabel);
     const labelAsString = (useStars ? this.props.settingsService.previousNormalLabel() : this.props.settingsService.emailLabel).toString();
     return (<section>
-      <h6>Label of todo.txt Emails</h6>
+      <h6>todo.txt Email Label</h6>
       <label className='todoer-settings-label'>
         <input type='checkbox' name='starred-or-label' checked={useStars}
           onChange={this._setStarredLabelFromCheckbox}/>
