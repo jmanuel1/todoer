@@ -38,7 +38,8 @@ export default class TodoFilePath extends React.Component {
       <h6>todo.txt Path</h6>
       <label className='todoer-settings-label'>
         Path to todo.txt file:
-        <input value={this.state.todoFilePath} onChange={this._onFormChange}
+        <input type='text' value={this.state.todoFilePath}
+          onChange={this._onFormChange}
           className='todoer-settings-input'/>
       </label>
     </section>);
