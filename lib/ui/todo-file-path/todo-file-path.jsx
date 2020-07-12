@@ -34,10 +34,13 @@ export default class TodoFilePath extends React.Component {
   }
 
   render() {
-    return (<label className='todoer-settings-label'>
-      Path to todo.txt file:
-      <input value={this.state.todoFilePath} onChange={this._onFormChange}
-        className='todoer-settings-input'/>
-    </label>);
+    return (<section>
+      <h6>todo.txt Path</h6>
+      <label className='todoer-settings-label'>
+        Path to todo.txt file:
+        <input value={this.state.todoFilePath} onChange={this._onFormChange}
+          className='todoer-settings-input'/>
+      </label>
+    </section>);
   }
 }

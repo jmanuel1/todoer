@@ -39,11 +39,11 @@ export default class EmailLabel extends React.Component {
   render() {
     const useStars = this.props.settingsService.emailLabel.equals(starredLabel);
     const labelAsString = (useStars ? this.props.settingsService.previousNormalLabel() : this.props.settingsService.emailLabel).toString();
-    return (<>
+    return (<section>
+      <h6>Label of todo.txt Emails</h6>
       <label className='todoer-settings-label'>
         <input type='checkbox' name='starred-or-label' checked={useStars}
-          onChange={this._setStarredLabelFromCheckbox}
-          className='todoer-settings-input'/>
+          onChange={this._setStarredLabelFromCheckbox}/>
         Watch starred emails
       </label>
       <label className='todoer-settings-label'>
@@ -52,6 +52,6 @@ export default class EmailLabel extends React.Component {
           value={labelAsString} onChange={this._setLabelFromTextArea}
           disabled={useStars} className='todoer-settings-input'/>
       </label>
-    </>);
+    </section>);
   }
 }
