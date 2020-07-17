@@ -47,7 +47,7 @@ export default class EmailLabel extends React.Component {
         Watch starred emails
       </label>
       <label className='todoer-settings-label'>
-        Watch the given label
+        Watch the given label:
         <input type='text' placeholder='Email label name'
           value={labelAsString} onChange={this._setLabelFromTextArea}
           disabled={useStars} className='todoer-settings-input'/>
