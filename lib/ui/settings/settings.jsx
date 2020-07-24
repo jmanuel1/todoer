@@ -20,18 +20,9 @@ export default class Settings extends React.Component {
   }
 
   render() {
-    return (<>
+    return (<div className='todoer-settings-container'>
       <TodoFilePath settingsService={this.props.settingsService}/>
       <EmailLabel settingsService={this.props.settingsService}/>
-    </>);
+    </div>);
   }
 }
-
-// Providing container styles tells the app how to constrain
-// the column your component is being rendered in. The min and
-// max size of the column are chosen automatically based on
-// these values.
-Settings.containerStyles = {
-  order: 1,
-  flexShrink: 0
-};

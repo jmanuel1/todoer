@@ -58,8 +58,6 @@ Please add tests with your changes. Tests are written with
 
 * Stability improvements
   * See issue #1 (partially fixed)
-* Make our preferences panel look pretty
-  * This might turn into multiple issues
 * Handle the situation where the user switches labels
   * Remove previous emails from the todo.txt?
   * Keep them and don't touch them?
