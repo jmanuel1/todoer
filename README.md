@@ -58,8 +58,6 @@ Please add tests with your changes. Tests are written with
 
 * Stability improvements
   * See issue #1 (partially fixed)
-* Make our preferences panel look pretty
-  * This might turn into multiple issues
 * Offer installable builds
   * This may be difficult since, as far as I know, Mailspring doesn't have a
     user-friendly way of installing plugins yet
