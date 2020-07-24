@@ -60,6 +60,11 @@ Please add tests with your changes. Tests are written with
   * See issue #1 (partially fixed)
 * Make our preferences panel look pretty
   * This might turn into multiple issues
+* Handle the situation where the user switches labels
+  * Remove previous emails from the todo.txt?
+  * Keep them and don't touch them?
+  * Keep them until their state changes, which seems to be the current behavior
+  * Something else?
 * Offer installable builds
   * This may be difficult since, as far as I know, Mailspring doesn't have a
     user-friendly way of installing plugins yet
