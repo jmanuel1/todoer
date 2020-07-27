@@ -1,4 +1,5 @@
 import {
+  ensureFixed,
   getTodosFrom,
   merge,
   writeTo,
@@ -104,5 +105,34 @@ describe('writeTo', function() {
     const content = await fs.readFile(path.join(dirpath, 'todo.txt'),
       'utf8');
     expect(content).toContain('email/id:4645t445');
+  });
+});
+
+describe('ensureFixed', function () {
+  let todo;
+  beforeEach(function () {
+    todo = new TodoTxtItem(
+      'placeholder',
+      [new EmailIDExtension()]);
+  });
+  it('escapes "@" in the text that can be read as contexts when read back', function () {
+    todo.text = 'Google Chat (Jason Manuel) @ Mon May 11, 2020';
+    todo = ensureFixed(todo);
+    expect(todo.text).toEqual('Google Chat (Jason Manuel) \\@ Mon May 11, 2020');
+  });
+  it('escapes "+" in the text that can be read as projects when read back', function () {
+    todo.text = 'haha + go escape';
+    todo = ensureFixed(todo);
+    expect(todo.text).toEqual('haha \\+ go escape');
+  });
+  it('does not escape "@" that will not read back as contexts', function () {
+    todo.text = 'Tech Interview Prep Call @ Thu Aug 29, 2019 (jama.indo@hotmail.com)';
+    todo = ensureFixed(todo);
+    expect(todo.text).toEqual('Tech Interview Prep Call \\@ Thu Aug 29, 2019 (jama.indo@hotmail.com)');
+  });
+  it('preserves the whitespace before an escaped "@"', function () {
+    todo.text = 'Luminosity Academy \t \t @ Weekly from 2pm to 3pm on Wednesday, Friday from Wed Aug 28 to Fri Dec 6 (MST) (example@sample.edu)';
+    todo = ensureFixed(todo);
+    expect(todo.text).toEqual('Luminosity Academy \t \t \\@ Weekly from 2pm to 3pm on Wednesday, Friday from Wed Aug 28 to Fri Dec 6 (MST) (example@sample.edu)');
   });
 });

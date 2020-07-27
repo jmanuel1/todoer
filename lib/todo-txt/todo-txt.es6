@@ -72,6 +72,7 @@ function replace(destination, original, source, property) {
   destination[property] = original[property];
 }
 
+// NOTE: returns a new todo object
 export function ensureFixed(todo) {
   todo = merge(todo, {}); // copy todo
   if (todo.priority === undefined) {
@@ -83,6 +84,7 @@ export function ensureFixed(todo) {
   if (todo.projects !== null && todo.projects.length === 0) {
     todo.projects = null;
   }
+  todo.text = escapePlusAndAt(todo.text);
   return todo;
 }
 
@@ -94,4 +96,8 @@ export async function writeTo(filename, todos) {
 
 export function parseTodoString(string) {
   return new TodoTxtItem(string, [new EmailIDExtension()]);
+}
+
+function escapePlusAndAt(text) {
+  return text.replace(/(\s+)([+@])/g, (_, space, char) => `${space}\\${char}`);
 }
