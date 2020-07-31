@@ -14,7 +14,7 @@ export default class SettingsService {
   }
 
   constructor(config, keypath = 'todoer') {
-    console.log(this.constructor._instance);
+    console.log('CURRENT INSTANCE', this.constructor._instance);
     if (this.constructor._instance !== undefined) {
       return this.constructor._instance;
     }
@@ -75,7 +75,7 @@ export default class SettingsService {
 
   // NOTE: idempotent
   static destroy() {
-    this._instance && this._instance._configSubscription.dispose();
+    this._instance && this._instance._configSubscription && this._instance._configSubscription.dispose();
     this._instance = undefined;
   }
 

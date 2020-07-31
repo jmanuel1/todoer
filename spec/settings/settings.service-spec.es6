@@ -19,6 +19,7 @@ describe('SettingsService', function() {
   });
 
   it('observes the provided configuration object', function() {
+    // FIXME: Flaky test
     const observe = jasmine.createSpy('observe').and.returnValue({ dispose() { } });
     new SettingsService({
       observe
