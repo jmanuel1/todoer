@@ -58,11 +58,8 @@ Please add tests with your changes. Tests are written with
 
 * Stability improvements
   * See issue #1 (partially fixed)
-* Handle the situation where the user switches labels
-  * Remove previous emails from the todo.txt?
-  * Keep them and don't touch them?
-  * Keep them until their state changes, which seems to be the current behavior
-  * Something else?
+* Handle the situation where the user switches labels (issue #6)
+  * Keep previously saved threads and don't touch them
 * Offer installable builds
   * This may be difficult since, as far as I know, Mailspring doesn't have a
     user-friendly way of installing plugins yet
