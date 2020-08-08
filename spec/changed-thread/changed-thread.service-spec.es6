@@ -1,4 +1,5 @@
 import ChangedThreadService from '../../lib/changed-thread/changed-thread.service';
+import { GeneralizedLabel } from '../../lib/models/generalized-label';
 
 describe('ChangedThreadService', function() {
   afterEach(function() {
@@ -72,5 +73,30 @@ describe('ChangedThreadService', function() {
     changedThreadService.listen(subscriber);
     databaseStore.fire();
     expect(subscriber).toHaveBeenCalledWith(thread);
+  });
+
+  it('does not call subscribers when thread is unstarred and current label is different', function() {
+    const subscriber = jasmine.createSpy('subscriber');
+    const thread = {
+      starred: false
+    };
+    const payload = {
+      objectClass: 'Thread',
+      objects: [thread]
+    };
+    const databaseStore = {
+      listen(subscriber, thisArg) {
+        this._subscriber = subscriber.bind(thisArg);
+        return () => null;
+      },
+      fire() {
+        this._subscriber(payload);
+      }
+    };
+    const changedThreadService = new ChangedThreadService(
+        databaseStore, { emailLabel: new GeneralizedLabel('label') });
+    changedThreadService.listen(subscriber);
+    databaseStore.fire();
+    expect(subscriber).not.toHaveBeenCalled();
   });
 });
