@@ -1,4 +1,4 @@
-import { ComponentRegistry, DatabaseStore, WorkspaceStore, PreferencesUIStore, React } from 'mailspring-exports';
+import { Actions, ComponentRegistry, DatabaseStore, TaskQueue, WorkspaceStore, PreferencesUIStore, React } from 'mailspring-exports';
 
 // for async/await
 import 'babel-polyfill';
@@ -55,12 +55,12 @@ export async function activate() {
     componentClassFn: () => settingsService.injectInto(Settings, React)
   });
   PreferencesUIStore.registerPreferencesTab(preferencesTab);
-  changedThreadService = new ChangedThreadService(DatabaseStore);
+  changedThreadService = new ChangedThreadService(Actions.queueTask, settingsService);
 
   // To make sure there is only one part of the process accessing the todo file
   // at a time, we use a queue. Without this, the file could get corrupted.
   const todoQueue = queue(asyncify(async thread => {
-    // NOTE: Assume that the account's organization unit is label.
+    // FIXME: We assume that the account's organization unit is label.
     // https://docs.nylas.com/reference#threads
     const { id, labels } = thread;
     let addToTodo = false;
