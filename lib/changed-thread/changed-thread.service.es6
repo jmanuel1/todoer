@@ -3,7 +3,7 @@
 import { GeneralizedLabel, starredLabel } from '../models/generalized-label';
 
 export default class ChangedThreadService {
-  constructor(queueTask, settingsService) {
+  constructor(queueTask, settingsService, databaseStore, threadModel) {
     if (this.constructor._instance !== undefined) {
       return this.constructor._instance;
     }
@@ -12,9 +12,14 @@ export default class ChangedThreadService {
     this._unlistenToTaskQueue = queueTask.listen(this._onDataChanged,
       this);
     this._settingsService = settingsService;
+    this._databaseStore = databaseStore;
+    this._threadModel = threadModel;
   }
 
   _onDataChanged(task) {
+    // FIXME: We assume that the account's organization unit is label.
+    // https://docs.nylas.com/reference#threads
+
     const label = this._settingsService.emailLabel;
     let shouldTrigger = false;
     console.debug(true, label);
@@ -29,15 +34,17 @@ export default class ChangedThreadService {
       console.debug(true, 'irrelevant');
       return;
     }
-    // if (payload.objectClass !== 'Thread') {
-    //   return;
-    // }
-    // // We catch all changes to threads, whether that means stars or labels
-    // for (const thread of payload.objects) {
-    //   for (const subscriber of this._subscribers) {
-    //     subscriber(thread);
-    //   }
-    // }
+
+    const threadIDs = task.threadIds;
+    for (const threadID of threadIDs) {
+      // FIXME: We read the *previous* state of the thread here. I think tasks
+      // are fired before changes are written to the database.
+      this._databaseStore.find(this._threadModel, threadID).then(thread => {
+        for (const subscriber of this._subscribers) {
+          subscriber(thread);
+        }
+      });
+    }
   }
 
   listen(subscriber) {
