@@ -7,18 +7,16 @@ describe('ChangedThreadService', function() {
   });
 
   it('is a singleton', function() {
-    expect(new ChangedThreadService({
+    const queueTask = {
       listen() {
         return () => null;
       }
-    })).toBe(new ChangedThreadService({
-      listen() {
-        return () => null;
-      }
-    }));
+    };
+    expect(new ChangedThreadService(queueTask))
+      .toBe(new ChangedThreadService());
   });
 
-  it('listens to the provided database store', function() {
+  it('listens to the provided queueTask action', function() {
     const listen = jasmine.createSpy('listen').and.returnValue(() =>
       null);
     new ChangedThreadService({
