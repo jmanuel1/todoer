@@ -6,6 +6,9 @@ export class GeneralizedLabel {
   }
 
   equals(generalizedLabel) {
+    if (typeof generalizedLabel === 'string') {
+      return this.equals(new GeneralizedLabel(generalizedLabel));
+    }
     return this._label === generalizedLabel._label;
   }
 

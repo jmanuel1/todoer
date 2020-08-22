@@ -59,30 +59,22 @@ export async function activate() {
 
   // To make sure there is only one part of the process accessing the todo file
   // at a time, we use a queue. Without this, the file could get corrupted.
-  const todoQueue = queue(asyncify(async thread => {
-    const { id, labels } = thread;
-    let addToTodo = false;
-    if (settingsService.emailLabel.equals(starredLabel) && thread.starred) {
-      addToTodo = true;
-    }
-    for (let label of labels) {
-      if (settingsService.emailLabel.toString() === label.displayName) {
-        addToTodo = true;
-      }
-    }
+  const todoQueue = queue(asyncify(async ({thread, addToTodo}) => {
+    debug('addToTodo', addToTodo);
+    const { id } = thread;
     if (addToTodo) {
       const { subject, firstMessageTimestamp: date } = thread;
       const todo = toTodo({ subject, date, id });
-      debug('entering save')
+      debug('entering save');
       await save(todo, settingsService.todoFilePath);
-      debug('exiting save')
+      debug('exiting save');
       return;
     }
-    debug('entering remove')
+    debug('entering remove');
     await remove(id, settingsService.todoFilePath);
   }), 1);
 
-  changedThreadService.listen(thread => todoQueue.push(thread));
+  changedThreadService.listen((thread, addToTodo) => todoQueue.push({thread, addToTodo}));
 }
 
 // Serialize is called when your package is about to be unmounted.

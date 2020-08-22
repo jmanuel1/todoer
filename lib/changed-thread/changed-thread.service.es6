@@ -21,19 +21,12 @@ export default class ChangedThreadService {
     // https://docs.nylas.com/reference#threads
 
     const label = this._settingsService.emailLabel;
-    let shouldTrigger = false;
-    console.debug(true, label);
-    if (task.starred !== undefined && label.equals(starredLabel)) {
-      console.debug(true, 'relevant to stars');
-      shouldTrigger = true;
-    } else if (task.labelsToAdd && task.labelsToAdd.some(l => new GeneralizedLabel(l.displayName).equals(label)) || task.labelsToRemove && task.labelsToRemove.some(l => new GeneralizedLabel(l.displayName).equals(label))) {
-      console.debug(true, 'relevant to label');
-      shouldTrigger = true;
-    }
-    if (!shouldTrigger) {
-      console.debug(true, 'irrelevant');
+    if (!isTaskRelatedToLabel(task, label)) {
       return;
     }
+
+    const labelAdded = label.equals(starredLabel) && task.starred ||
+      task.labelsToAdd.some(l => label.equals(l.displayName));
 
     const threadIDs = task.threadIds;
     for (const threadID of threadIDs) {
@@ -41,7 +34,7 @@ export default class ChangedThreadService {
       // are fired before changes are written to the database.
       this._databaseStore.find(this._threadModel, threadID).then(thread => {
         for (const subscriber of this._subscribers) {
-          subscriber(thread);
+          subscriber(thread, labelAdded);
         }
       });
     }
@@ -55,4 +48,10 @@ export default class ChangedThreadService {
     this.constructor._instance = undefined;
     this._unlistenToTaskQueue();
   }
+}
+
+function isTaskRelatedToLabel(task, label) {
+  return task.starred !== undefined && label.equals(starredLabel) ||
+    task.labelsToAdd && [...task.labelsToAdd, ...task.labelsToRemove].some(
+      l => label.equals(l.displayName));
 }
