@@ -26,7 +26,7 @@ export default class ChangedThreadService {
     }
 
     const labelAdded = label.equals(starredLabel) && task.starred ||
-      task.labelsToAdd.some(l => label.equals(l.displayName));
+      !!task.labelsToAdd && task.labelsToAdd.some(l => label.equals(l));
 
     const threadIDs = task.threadIds;
     for (const threadID of threadIDs) {

@@ -9,6 +9,9 @@ export class GeneralizedLabel {
     if (typeof generalizedLabel === 'string') {
       return this.equals(new GeneralizedLabel(generalizedLabel));
     }
+    if (generalizedLabel.displayName !== undefined) {
+      return this.equals(generalizedLabel.displayName);
+    }
     return this._label === generalizedLabel._label;
   }
 
