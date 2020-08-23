@@ -1,5 +1,7 @@
 import ChangedThreadService from '../../lib/changed-thread/changed-thread.service';
-import { GeneralizedLabel } from '../../lib/models/generalized-label';
+import { GeneralizedLabel, starredLabel } from '../../lib/models/generalized-label';
+import SettingsService from '../../lib/settings/settings.service';
+import configMock from '../mocks/config';
 
 describe('ChangedThreadService', function() {
   afterEach(function() {
@@ -41,12 +43,30 @@ describe('ChangedThreadService', function() {
       },
       fire() {
         this._subscriber(payload);
+      },
+      find() {
+        return {
+          then(callback) {
+            callback(thread);
+          }
+        }
       }
     };
-    const changedThreadService = new ChangedThreadService(databaseStore);
+    const queueTask = {
+      listen(subscriber, thisArg) {
+        this._subscriber = subscriber.bind(thisArg);
+        return () => null;
+      },
+      fire() {
+        this._subscriber({starred: true, threadIds: ['thread-id']});
+      }
+    };
+    const settingsService = new SettingsService(configMock);
+    settingsService.emailLabel = starredLabel;
+    const changedThreadService = new ChangedThreadService(queueTask, settingsService, databaseStore, null);
     changedThreadService.listen(subscriber);
-    databaseStore.fire();
-    expect(subscriber).toHaveBeenCalledWith(thread);
+    queueTask.fire();
+    expect(subscriber).toHaveBeenCalledWith(thread, true);
   });
 
   it('calls a subscriber when an email is unstarred', function() {
@@ -65,12 +85,30 @@ describe('ChangedThreadService', function() {
       },
       fire() {
         this._subscriber(payload);
+      },
+      find() {
+        return {
+          then(callback) {
+            callback(thread);
+          }
+        }
       }
     };
-    const changedThreadService = new ChangedThreadService(databaseStore);
+    const queueTask = {
+      listen(subscriber, thisArg) {
+        this._subscriber = subscriber.bind(thisArg);
+        return () => null;
+      },
+      fire() {
+        this._subscriber({starred: false, threadIds: ['thread-id']});
+      }
+    }
+    const settingsService = new SettingsService(configMock);
+    settingsService.emailLabel = starredLabel;
+    const changedThreadService = new ChangedThreadService(queueTask, settingsService, databaseStore, null);
     changedThreadService.listen(subscriber);
-    databaseStore.fire();
-    expect(subscriber).toHaveBeenCalledWith(thread);
+    queueTask.fire();
+    expect(subscriber).toHaveBeenCalledWith(thread, false);
   });
 
   it('does not call subscribers when thread is unstarred and current label is different', function() {
