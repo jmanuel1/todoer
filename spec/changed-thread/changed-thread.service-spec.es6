@@ -6,6 +6,7 @@ import configMock from '../mocks/config';
 describe('ChangedThreadService', function() {
   afterEach(function() {
     new ChangedThreadService().destroy();
+    SettingsService.destroy();
   });
 
   it('is a singleton', function() {
