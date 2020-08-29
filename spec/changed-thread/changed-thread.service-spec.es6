@@ -1,12 +1,9 @@
 import ChangedThreadService from '../../lib/changed-thread/changed-thread.service';
 import { GeneralizedLabel, starredLabel } from '../../lib/models/generalized-label';
-import SettingsService from '../../lib/settings/settings.service';
-import configMock from '../mocks/config';
 
 describe('ChangedThreadService', function() {
   afterEach(function() {
     new ChangedThreadService().destroy();
-    SettingsService.destroy();
   });
 
   it('is a singleton', function() {
@@ -62,8 +59,7 @@ describe('ChangedThreadService', function() {
         this._subscriber({starred: true, threadIds: ['thread-id']});
       }
     };
-    const settingsService = new SettingsService(configMock);
-    settingsService.emailLabel = starredLabel;
+    const settingsService = {emailLabel: starredLabel};
     const changedThreadService = new ChangedThreadService(queueTask, settingsService, databaseStore, null);
     changedThreadService.listen(subscriber);
     queueTask.fire();
@@ -104,8 +100,7 @@ describe('ChangedThreadService', function() {
         this._subscriber({starred: false, threadIds: ['thread-id']});
       }
     }
-    const settingsService = new SettingsService(configMock);
-    settingsService.emailLabel = starredLabel;
+    const settingsService = {emailLabel: starredLabel};
     const changedThreadService = new ChangedThreadService(queueTask, settingsService, databaseStore, null);
     changedThreadService.listen(subscriber);
     queueTask.fire();
