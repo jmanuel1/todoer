@@ -109,26 +109,19 @@ describe('ChangedThreadService', function() {
 
   it('does not call subscribers when thread is unstarred and current label is different', function() {
     const subscriber = jasmine.createSpy('subscriber');
-    const thread = {
-      starred: false
-    };
-    const payload = {
-      objectClass: 'Thread',
-      objects: [thread]
-    };
-    const databaseStore = {
+    const queueTask = {
       listen(subscriber, thisArg) {
         this._subscriber = subscriber.bind(thisArg);
         return () => null;
       },
       fire() {
-        this._subscriber(payload);
+        this._subscriber({ starred: false });
       }
     };
     const changedThreadService = new ChangedThreadService(
-        databaseStore, { emailLabel: new GeneralizedLabel('label') });
+      queueTask, { emailLabel: new GeneralizedLabel('label') }, null, null);
     changedThreadService.listen(subscriber);
-    databaseStore.fire();
+    queueTask.fire();
     expect(subscriber).not.toHaveBeenCalled();
   });
 });
