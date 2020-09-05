@@ -44,7 +44,7 @@ Plugin code goes in `lib/`, tests/specs go in `spec/`.
 * `email-to-todo/`: code that converts email objects to todo.txt objects
 * `settings/`: code that manages the plugin user preferences
 * `changed-thread/`: code that grabs email threads upon any state change (like
-  a star or labels)
+  a star or labels) and fires events when the change is relevant to the plugin
 * `todo-txt/`: handles the creation of todo objects, reading and writing of
   `todo.txt`
 * `ui/`: user interface components
@@ -58,8 +58,6 @@ Please add tests with your changes. Tests are written with
 
 * Stability improvements
   * See issue #1 (partially fixed)
-* Handle the situation where the user switches labels (issue #6)
-  * Keep previously saved threads and don't touch them
 * Offer installable builds
   * This may be difficult since, as far as I know, Mailspring doesn't have a
     user-friendly way of installing plugins yet
