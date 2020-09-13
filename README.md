@@ -25,7 +25,7 @@ todo.txt files that are synced over a cloud service.
 Development should be done under Node **10.10+**.
 
 This project uses Yarn as the package manager and npm scripts for build scripts.
-Make sure to run `yarn` before you start developmwnt.
+Make sure to run `yarn` before you start development.
 
 To build the plugin, use `yarn build`. You should get a `lib/main.js` file. To
 test the build, use `yarn test`.
