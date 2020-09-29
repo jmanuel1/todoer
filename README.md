@@ -20,6 +20,18 @@ todo.txt files that are synced over a cloud service.
   valid path).
 * Each to-do item created from the subject and date of the thread.
 
+## Installation
+
+Download a release from [the releases
+page](https://github.com/jmanuel1/todoer/releases) or clone the repository using
+`git clone https://github.com/jmanuel1/todoer.git`. If you downloaded a release,
+unzip into a folder.
+
+In the folder containing the release, run `yarn build`. Next, open Mailspring.
+In the menu, choose `Developer > Install a Plugin...`. Then choose the folder
+containing the plugin. Note that installation might freeze Mailspring for a
+while.
+
 ## Development
 
 Development should be done under Node **10.10+**.
