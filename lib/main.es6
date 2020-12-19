@@ -1,4 +1,17 @@
-import { Actions, ComponentRegistry, DatabaseStore, TaskQueue, Thread, WorkspaceStore, PreferencesUIStore, React } from 'mailspring-exports';
+let Actions, ComponentRegistry, DatabaseStore, TaskQueue, Thread, WorkspaceStore, PreferencesUIStore, React;
+try {
+  const mailspringExports = require('mailspring-exports');
+  Actions = mailspringExports.Actions;
+  ComponentRegistry = mailspringExports.ComponentRegistry;
+  DatabaseStore = mailspringExports.DatabaseStore;
+  TaskQueue = mailspringExports.TaskQueue;
+  Thread = mailspringExports.Thread;
+  WorkspaceStore = mailspringExports.WorkspaceStore;
+  PreferencesUIStore = mailspringExports.PreferencesUIStore;
+  React = mailspringExports.React;
+} catch {
+  // do nothing
+}
 
 // for async/await
 import 'babel-polyfill';
@@ -41,13 +54,14 @@ export const config = {
 // saved state using `serialize` it is provided.
 //
 export async function activate() {
-  settingsService = new SettingsService(AppEnv.config);
+  settingsService = new SettingsService(AppEnv.config, 'todoer', config);
 
   // back up the user's todo before we do anything that might damage it
   // TODO: Back up on every modification
   // TODO: Keep previous revisions (timestamp?)
   const todoFilePath = settingsService.todoFilePath;
-  await backup(todoFilePath, todoFilePath + '.backup');
+  if (todoFilePath)
+    await backup(todoFilePath, todoFilePath + '.backup');
 
   preferencesTab = new PreferencesUIStore.TabItem({
     tabId: 'Todoer',

@@ -1,4 +1,5 @@
 import { GeneralizedLabel, starredLabel } from '../models/generalized-label';
+import debug from '../dev/debug';
 
 export default class SettingsService {
   injectInto(Component, React) {
@@ -13,8 +14,8 @@ export default class SettingsService {
     }
   }
 
-  constructor(config, keypath = 'todoer') {
-    console.log('CURRENT INSTANCE', this.constructor._instance);
+  constructor(config, keypath = 'todoer', defaultConfig) {
+    debug('CURRENT INSTANCE', this.constructor._instance);
     if (this.constructor._instance !== undefined) {
       return this.constructor._instance;
     }
@@ -24,10 +25,27 @@ export default class SettingsService {
     this._subscribers = [];
     this._configSubscription = config.observe(
       keypath,
-      ({todoFilePath: path, emailLabel, useStarsForLabel}) => {
-        path && (this.todoFilePath = path);
-        emailLabel && (this.emailLabel = new GeneralizedLabel(emailLabel));
-        useStarsForLabel && (this.emailLabel = starredLabel);
+      settings => {
+        if (settings) {
+          settings.todoFilePath && (this.todoFilePath = settings.todoFilePath);
+          settings.emailLabel && (this.emailLabel = new GeneralizedLabel(settings.emailLabel));
+          settings.useStarsForLabel && (this.emailLabel = starredLabel);
+        }
+        // We might try to access the config before Mailspring has set it up. So,
+        // let's take the defaults from ./main.
+        if (defaultConfig) {
+          if (!settings.todoFilePath) {
+            settings.todoFilePath = defaultConfig.todoFilePath.default;
+          }
+          if (!settings.emailLabel) {
+            settings.emailLabel = new GeneralizedLabel(defaultConfig.emailLabel.default);
+          }
+          if (settings.useStarsForLabel === undefined) {
+            if (defaultConfig.useStarsForLabel.default) {
+              settings.emailLabel = starredLabel;
+            }
+          }
+        }
       });
   }
 
