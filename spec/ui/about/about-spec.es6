@@ -47,4 +47,14 @@ describe("The About component", function () {
     }
     expect(authorsExist.every(a => a)).toBeTrue();
   });
+
+  it("should contain a copyright notice", function () {
+    const dds = ReactTestUtils.scryRenderedDOMComponentsWithTag(this.component, 'dd');
+    const copyright = '2021, jason manuel and todoer contributors';
+    let copyrightExists = false;
+    for (let dd of dds) {
+      copyrightExists = copyrightExists || dd.textContent.toLowerCase().includes(copyright);
+    }
+    expect(copyrightExists).toBeTrue();
+  });
 });

@@ -15,5 +15,7 @@ export default function About() {
       <a href='http://jason-manuel.com'>Jason Manuel</a>
       ... and <a href='https://github.com/jmanuel1/todoer'>contributors?</a>
     </dd>
+    <dt>Copyright</dt>
+    <dd>2019-2021, Jason Manuel and Todoer Contributors</dd>
   </dl>);
 }
