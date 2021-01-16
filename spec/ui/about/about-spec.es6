@@ -35,5 +35,16 @@ describe("The About component", function () {
       versionExists = versionExists || dd.textContent.includes(version);
     }
     expect(versionExists).toBeTrue();
-  })
+  });
+
+  it("should contain the authors of the plugin", function () {
+    const dds = ReactTestUtils.scryRenderedDOMComponentsWithTag(this.component, 'dd');
+    const authors = ['jason manuel', 'contributors'];
+    let authorsExist = [false, false];
+    for (let dd of dds) {
+      for (let i = 0; i < authors.length; i++)
+        authorsExist[i] = authorsExist[i] || dd.textContent.toLowerCase().includes(authors[i]);
+    }
+    expect(authorsExist.every(a => a)).toBeTrue();
+  });
 });

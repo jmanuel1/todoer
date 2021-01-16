@@ -10,5 +10,10 @@ export default function About() {
   return (<dl>
     <dt>Version</dt>
     <dd>{version}</dd>
+    <dt>Authors</dt>
+    <dd>
+      <a href='http://jason-manuel.com'>Jason Manuel</a>
+      ... and <a href='https://github.com/jmanuel1/todoer'>contributors?</a>
+    </dd>
   </dl>);
 }
