@@ -22,6 +22,9 @@ describe("The About component", function () {
       // to be wrapped in a class component
       <Wrapper><About /></Wrapper>
     );
+    const dds = ReactTestUtils.scryRenderedDOMComponentsWithTag(
+      this.component, 'dd');
+    this.dds = dds;
   });
 
   it("should render into the page", function () {
@@ -29,32 +32,33 @@ describe("The About component", function () {
   });
 
   it("should contain the current version of the plugin", function () {
-    const dds = ReactTestUtils.scryRenderedDOMComponentsWithTag(this.component, 'dd');
-    let versionExists = false;
-    for (let dd of dds) {
-      versionExists = versionExists || dd.textContent.includes(version);
-    }
+    let versionExists = this.dds.some(dd => dd.textContent.includes(version));
     expect(versionExists).toBeTrue();
   });
 
   it("should contain the authors of the plugin", function () {
-    const dds = ReactTestUtils.scryRenderedDOMComponentsWithTag(this.component, 'dd');
     const authors = ['jason manuel', 'contributors'];
-    let authorsExist = [false, false];
-    for (let dd of dds) {
-      for (let i = 0; i < authors.length; i++)
-        authorsExist[i] = authorsExist[i] || dd.textContent.toLowerCase().includes(authors[i]);
-    }
-    expect(authorsExist.every(a => a)).toBeTrue();
+    let authorsExist = this.dds.some(dd =>
+      authors.every(author => dd.textContent.toLowerCase().includes(author)));
+    expect(authorsExist).toBeTrue();
   });
 
   it("should contain a copyright notice", function () {
-    const dds = ReactTestUtils.scryRenderedDOMComponentsWithTag(this.component, 'dd');
     const copyright = '2021, jason manuel and todoer contributors';
-    let copyrightExists = false;
-    for (let dd of dds) {
-      copyrightExists = copyrightExists || dd.textContent.toLowerCase().includes(copyright);
-    }
+    let copyrightExists = this.dds.some(dd =>
+      dd.textContent.toLowerCase().includes(copyright));
     expect(copyrightExists).toBeTrue();
+  });
+
+  it("should contain the license", function () {
+    const license = 'MIT';
+    const licenseLink =
+      `https://github.com/jmanuel1/todoer/blob/v${version}/LICENSE.md`;
+    let licenseAndLinkExist = this.dds.some(dd => {
+      let licenseExists = dd.textContent.includes(license);
+      let licenseLinkExists = dd.innerHTML.includes(licenseLink);
+      return licenseExists && licenseLinkExists;
+    });
+    expect(licenseAndLinkExist).toBeTrue();
   });
 });

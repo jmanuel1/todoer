@@ -17,5 +17,11 @@ export default function About() {
     </dd>
     <dt>Copyright</dt>
     <dd>2019-2021, Jason Manuel and Todoer Contributors</dd>
+    <dt>License</dt>
+    <dd>
+      <a href={`https://github.com/jmanuel1/todoer/blob/v${version}/LICENSE.md`}>
+        MIT
+      </a>
+    </dd>
   </dl>);
 }
