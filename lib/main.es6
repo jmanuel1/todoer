@@ -59,6 +59,8 @@ export async function activate() {
   // back up the user's todo before we do anything that might damage it
   // TODO: Back up on every modification
   // TODO: Keep previous revisions (timestamp?)
+  // FIXME: If backup fails (if e.g. file doesn't exist), notify user and don't
+  // crash.
   const todoFilePath = settingsService.todoFilePath;
   if (todoFilePath)
     await backup(todoFilePath, todoFilePath + '.backup');
