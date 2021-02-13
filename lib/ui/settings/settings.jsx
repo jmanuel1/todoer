@@ -1,9 +1,4 @@
-let React;
-try {
-  React = require('mailspring-exports').React;
-} catch (e) {
-  React = require('react');
-}
+import React from '../../react';
 import TodoFilePath from '../todo-file-path/todo-file-path';
 import EmailLabel from '../email-label/email-label';
 import About from '../about/about';
