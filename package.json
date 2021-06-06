@@ -29,8 +29,8 @@
     "jasmine": "^3.4.0",
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react": "16.6.0",
+    "react-dom": "16.6.0"
   },
   "scripts": {
     "build": "babel lib -d lib",
