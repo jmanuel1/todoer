@@ -17,7 +17,7 @@ export default class Help extends React.Component {
   }
 
   render() {
-    return (<section>
+    return (<section className='todoer-help'>
       <details>
         <summary><h6>Help</h6></summary>
         <p>
