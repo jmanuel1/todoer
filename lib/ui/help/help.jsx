@@ -18,8 +18,9 @@ export default class Help extends React.Component {
 
   render() {
     return (<section className='todoer-help'>
+      <h6>Help</h6>
       <details>
-        <summary><h6>Help</h6></summary>
+        <summary>Usage</summary>
         <p>
           <a href={`https://github.com/jmanuel1/todoer/blob/v${version}/docs/USAGE.md`}>
             Online edition of usage information
