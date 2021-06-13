@@ -1,4 +1,5 @@
 import React from '../../react';
+import ReactMarkdown from 'react-markdown';
 import { version } from '../../../package.json';
 import { promises as fs } from 'fs';
 import * as path from 'path';
@@ -24,8 +25,14 @@ export default class Help extends React.Component {
             Online edition of usage information
           </a>
         </p>
-        <pre>{this.state.help}</pre>
+        <ReactMarkdown transformImageUri={Help.transformImageUri}>
+          {this.state.help}
+        </ReactMarkdown>
       </details>
     </section>);
+  }
+
+  static transformImageUri(src, alt, title) {
+    return `file:///${__dirname}/../../../docs/${src}`;
   }
 }
