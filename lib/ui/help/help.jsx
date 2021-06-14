@@ -26,12 +26,19 @@ export default class Help extends React.Component {
             Online edition of usage information
           </a>
         </p>
-        <ReactMarkdown transformImageUri={Help.transformImageUri}>
+        <ReactMarkdown
+          transformImageUri={Help.transformImageUri}
+          components={Help.components}
+        >
           {this.state.help}
         </ReactMarkdown>
       </details>
     </section>);
   }
+
+  static components = {
+    'a': 'span'
+  };
 
   static transformImageUri(src, alt, title) {
     return `file:///${__dirname}/../../../docs/${src}`;
