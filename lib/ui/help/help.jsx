@@ -41,6 +41,6 @@ export default class Help extends React.Component {
   };
 
   static transformImageUri(src, alt, title) {
-    return `file:///${__dirname}/../../../docs/${src}`;
+    return `file:///${path.join(__dirname, '/../../../docs/', src)}`;
   }
 }
