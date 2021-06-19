@@ -5,6 +5,10 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 
 export default class Help extends React.Component {
+  static defaultProps = {
+    onHelpLoad() {}
+  };
+
   constructor(props) {
     super(props);
     this.state = { help: 'Loading help...' };
@@ -12,8 +16,12 @@ export default class Help extends React.Component {
   }
 
   componentDidMount() {
-    fs.readFile(this.HELP_PATH, 'utf-8').then(content => this.setState(s =>
-      ({ ...s, help: content })));
+    fs.readFile(this.HELP_PATH, 'utf-8').then(content => {
+      this.setState(
+        s => ({ help: content }),
+        this.props.onHelpLoad
+      );
+    });
   }
 
   render() {
