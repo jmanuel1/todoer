@@ -10,26 +10,24 @@ import Help from '../../../lib/ui/help/help';
 
 describe("The Help component", function () {
   beforeEach(function () {
-    // QUESTION: Can I make beforeEach async so that the test functions don't
-    // have to be?
-    this.component = new Promise(resolve => {
+    return new Promise(resolve => {
       const component = ReactTestUtils.renderIntoDocument(
         <Help onHelpLoad={() => {
           const helpElement = ReactTestUtils.scryRenderedDOMComponentsWithTag(
             component, 'section')[0];
+          this.component = component;
           this.helpElement = helpElement;
-          resolve(component);
+          resolve();
         }}/>
       );
     });
   });
 
-  it("should render into the page", async function () {
-    expect(await this.component).toBeDefined();
+  it("should render into the page", function () {
+    expect(this.component).toBeDefined();
   });
 
-  it("should contain the usage document", async function () {
-    await this.component;
+  it("should contain the usage document", function () {
     expect(this.helpElement.textContent).toContain("How to use todoer");
   });
 });
