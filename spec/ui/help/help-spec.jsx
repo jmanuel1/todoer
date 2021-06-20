@@ -8,7 +8,7 @@ jsDOMGlobal();
 
 import Help from '../../../lib/ui/help/help';
 
-describe("The Help component", function () {
+describe('The Help component', function () {
   beforeEach(function () {
     return new Promise(resolve => {
       const component = ReactTestUtils.renderIntoDocument(
@@ -23,11 +23,11 @@ describe("The Help component", function () {
     });
   });
 
-  it("should render into the page", function () {
+  it('should render into the page', function () {
     expect(this.component).toBeDefined();
   });
 
-  it("should contain the usage document", function () {
-    expect(this.helpElement.textContent).toContain("How to use todoer");
+  it('should contain the usage document', function () {
+    expect(this.helpElement.textContent).toContain('How to use todoer');
   });
 });
