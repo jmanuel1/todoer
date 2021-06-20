@@ -12,11 +12,10 @@ export default class Help extends React.Component {
   constructor(props) {
     super(props);
     this.state = { help: 'Loading help...' };
-    this.HELP_PATH = path.join(__dirname, '../../../docs/USAGE.md');
   }
 
   componentDidMount() {
-    fs.readFile(this.HELP_PATH, 'utf-8').then(content => {
+    fs.readFile(Help.HELP_PATH, 'utf-8').then(content => {
       this.setState(
         s => ({ help: content }),
         this.props.onHelpLoad
@@ -43,6 +42,8 @@ export default class Help extends React.Component {
       </details>
     </section>);
   }
+
+  static HELP_PATH = path.join(__dirname, '../../../docs/USAGE.md');
 
   static components = {
     'a': 'span'
