@@ -29,21 +29,35 @@ export function toTodo(email) {
 }
 
 export async function save(todo, filepath) {
+  // These many debug calls are here so that I can keep track of the function's
+  // progress.
+  debug('reading existing todos');
   const previousTodos = await getTodosFrom(filepath);
+  debug('grabbing all thread IDs');
   const emailIDs = previousTodos.map(todo => todo['email/id']).filter(id =>
     id !== undefined);
+  debug('checking for presence of this thread');
   if (emailIDs.includes(todo['email/id'])) {
+    debug('thread already present');
     return;
   }
 
+  debug('reading entire todo.txt');
   const contents = await fs.readFile(filepath, 'utf8');
+  debug('checking if todo.txt ends with newline');
   const newline = contents[contents.length - 1] === '\n' ? '' : '\n';
+  debug('stringifying the todo');
   const todoString = ensureFixed(todo).toString();
+  debug('appending the todo to the todo.txt');
   // Since we want to preserve how the original todos are written, we append to
   // the file
+  // TODO: Sometimes the following line just doesn't finish and I'm not sure
+  // why. I should put a timeout on it and notify the user that the operation
+  // failed until I can figure out what's going on.
   await fs.writeFile(filepath, newline + todoString, {
     flag: 'a'
   });
+  debug('save finished');
 }
 
 // this might nuke the file if someone clicks fast enough
