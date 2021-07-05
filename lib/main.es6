@@ -1,10 +1,9 @@
-let Actions, ComponentRegistry, DatabaseStore, TaskQueue, Thread, WorkspaceStore, PreferencesUIStore, React;
+let Actions, ComponentRegistry, DatabaseStore, Thread, WorkspaceStore, PreferencesUIStore, React;
 try {
   const mailspringExports = require('mailspring-exports');
   Actions = mailspringExports.Actions;
   ComponentRegistry = mailspringExports.ComponentRegistry;
   DatabaseStore = mailspringExports.DatabaseStore;
-  TaskQueue = mailspringExports.TaskQueue;
   Thread = mailspringExports.Thread;
   WorkspaceStore = mailspringExports.WorkspaceStore;
   PreferencesUIStore = mailspringExports.PreferencesUIStore;
@@ -71,7 +70,7 @@ export async function activate() {
     componentClassFn: () => settingsService.injectInto(Settings, React)
   });
   PreferencesUIStore.registerPreferencesTab(preferencesTab);
-  changedThreadService = new ChangedThreadService(Actions.queueTask, settingsService, DatabaseStore, Thread);
+  changedThreadService = new ChangedThreadService(queueTaskCombined, settingsService, DatabaseStore, Thread);
 
   // To make sure there is only one part of the process accessing the todo file
   // at a time, we use a queue. Without this, the file could get corrupted.
@@ -108,4 +107,19 @@ export function deactivate() {
   changedThreadService.destroy();
   SettingsService.destroy();
   PreferencesUIStore.unregisterPreferencesTab(preferencesTab.sectionId);
+}
+
+const queueTaskCombined = {
+  listen(subscriber, receiver) {
+    const unlistenQueueTask = Actions.queueTask.listen(subscriber, receiver);
+    const unlistenQueueTasks = Actions.queueTasks.listen(function (tasks) {
+      tasks.map(subscriber.bind(this));
+    }, receiver);
+    const unlistenQueueUndoOnlyTask = Actions.queueUndoOnlyTask.listen(subscriber, receiver);
+    return () => {
+      unlistenQueueTask();
+      unlistenQueueTasks();
+      unlistenQueueUndoOnlyTask();
+    };
+  }
 }
