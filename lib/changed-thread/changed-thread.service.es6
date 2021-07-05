@@ -17,21 +17,23 @@ export default class ChangedThreadService {
   }
 
   _onDataChanged(task) {
-    // FIXME: We assume that the account's organization unit is label.
-    // https://docs.nylas.com/reference#threads
-
     const label = this._settingsService.emailLabel;
     if (!isTaskRelatedToLabel(task, label)) {
       return;
     }
 
     const labelAdded = label.equals(starredLabel) && task.starred ||
-      !!task.labelsToAdd && task.labelsToAdd.some(l => label.equals(l));
+      !!task.labelsToAdd && task.labelsToAdd.some(l => label.equals(l)) ||
+      task.folder && label.equals(task.folder);
 
+    // NOTE: These tasks can act on individual messages, too. That is currently
+    // not supported by todoer since I don't need it.
     const threadIDs = task.threadIds;
     for (const threadID of threadIDs) {
-      // FIXME: We read the *previous* state of the thread here. I think tasks
-      // are fired before changes are written to the database.
+      // We read the *previous* state of the thread here. I think tasks are
+      // fired before changes are written to the database. This seems to not be
+      // an issue, though. In particular, we ask for the presence of the label
+      // through `labelAdded` instead of the stale thread.
       this._databaseStore.find(this._threadModel, threadID).then(thread => {
         for (const subscriber of this._subscribers) {
           subscriber(thread, labelAdded);
@@ -53,5 +55,6 @@ export default class ChangedThreadService {
 function isTaskRelatedToLabel(task, label) {
   return task.starred !== undefined && label.equals(starredLabel) ||
     task.labelsToAdd && [...task.labelsToAdd, ...task.labelsToRemove].some(
-      l => label.equals(l.displayName));
+      l => label.equals(l.displayName)) ||
+    task.folder !== undefined;
 }
