@@ -24,7 +24,7 @@ export default class ChangedThreadService {
 
     const labelAdded = label.equals(starredLabel) && task.starred ||
       !!task.labelsToAdd && task.labelsToAdd.some(l => label.equals(l)) ||
-      task.folder && label.equals(task.folder);
+      !!task.folder && label.equals(task.folder);
 
     // NOTE: These tasks can act on individual messages, too. That is currently
     // not supported by todoer since I don't need it.
