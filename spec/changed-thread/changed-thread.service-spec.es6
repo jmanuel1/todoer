@@ -124,4 +124,43 @@ describe('ChangedThreadService', function() {
     queueTask.fire();
     expect(subscriber).not.toHaveBeenCalled();
   });
+
+  it('calls a subscriber when an email is moved to a different folder', function() {
+    const subscriber = jasmine.createSpy('subscriber');
+    const thread = {};
+    const payload = {
+      objectClass: 'Thread',
+      objects: [thread]
+    };
+    const databaseStore = {
+      listen(subscriber, thisArg) {
+        this._subscriber = subscriber.bind(thisArg);
+        return () => null;
+      },
+      fire() {
+        this._subscriber(payload);
+      },
+      find() {
+        return {
+          then(callback) {
+            callback(thread);
+          }
+        }
+      }
+    };
+    const queueTask = {
+      listen(subscriber, thisArg) {
+        this._subscriber = subscriber.bind(thisArg);
+        return () => null;
+      },
+      fire() {
+        this._subscriber({folder: {displayName: 'folder'}, threadIds: ['thread-id']});
+      }
+    };
+    const settingsService = {emailLabel: new GeneralizedLabel('folder')};
+    const changedThreadService = new ChangedThreadService(queueTask, settingsService, databaseStore, null);
+    changedThreadService.listen(subscriber);
+    queueTask.fire();
+    expect(subscriber).toHaveBeenCalledWith(thread, true);
+  });
 });
