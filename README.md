@@ -75,5 +75,3 @@ Please add tests with your changes. Tests are written with
 * Offer installable builds
   * This may be difficult since, as far as I know, Mailspring doesn't have a
     user-friendly way of installing plugins yet
-* Work with folders too
-  * This use case is not explicitly handled yet, and it is unknown if it works.
