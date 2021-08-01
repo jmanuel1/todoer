@@ -50,10 +50,9 @@ describe('toTodo', function() {
 
 describe('save', function() {
   let todoDir, todoPath;
-  beforeEach(async function(done) {
+  beforeEach(async function() {
     todoDir = await fs.mkdtemp(path.join(os.tmpdir(), 'todoer-'));
     todoPath = path.join(todoDir, 'todo.txt');
-    done();
   });
   it('can save a todo to a file and presere other todos', async function() {
     const original = 'some todo +project\n';
@@ -102,10 +101,9 @@ describe('save', function() {
 
 describe('remove', function() {
   let todoDir, todoPath;
-  beforeEach(async function(done) {
+  beforeEach(async function() {
     todoDir = await fs.mkdtemp(path.join(os.tmpdir(), 'todoer-'));
     todoPath = path.join(todoDir, 'todo.txt');
-    done();
   });
   it('deletes the todo with the given email/id from the given file', async function() {
     const original =
