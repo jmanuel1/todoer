@@ -15,7 +15,7 @@
   },
   "description": "Automatically add an email to your local todo.txt when you star it.",
   "dependencies": {
-    "async": "^3.2.0",
+    "async": "^3.2.2",
     "babel-polyfill": "^6.26.0",
     "jstodotxt": "^0.7.0",
     "react-markdown": "^6.0.2"
